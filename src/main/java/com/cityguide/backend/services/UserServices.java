@@ -1,9 +1,11 @@
 package com.cityguide.backend.services;
 
+import com.cityguide.backend.entities.Answer;
 import com.cityguide.backend.entities.City;
 import com.cityguide.backend.entities.Question;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
+import com.cityguide.backend.repositories.AnswerRepository;
 import com.cityguide.backend.repositories.CityRepository;
 import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
@@ -23,6 +25,9 @@ public class UserServices {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    AnswerRepository answerRepository;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -53,6 +58,24 @@ public class UserServices {
         return  new ResponseEntity<>(questionRepository.save(question),HttpStatus.ACCEPTED);
     }
 
+    //User Operations for Answers
+    public ResponseEntity<Answer> postans(String requestTokenHeader, Answer answer)
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        answer.setUsername(user);
+        return  new ResponseEntity<>(answerRepository.save(answer),HttpStatus.ACCEPTED);
+    }
+    //Api for getting all answers for a question
+     public ResponseEntity<Question> getanswers(int ques_id){
+        try{
+            return new ResponseEntity<>(questionRepository.findById(ques_id).get(),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+     }
 
     //User Operation for Cities
 

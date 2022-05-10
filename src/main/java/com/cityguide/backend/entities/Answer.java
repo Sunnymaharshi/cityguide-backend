@@ -17,9 +17,9 @@ public class Answer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     int ans_id;
     String description;
-    int freq;
-    int upvotes;
-    int downvotes;
+    int freq=0;
+    int upvotes=0;
+    int downvotes=0;
 
     @Column(name = "ques_id")
     int ques_id;

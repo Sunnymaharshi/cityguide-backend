@@ -1,5 +1,6 @@
 package com.cityguide.backend.controllers;
 
+import com.cityguide.backend.entities.Answer;
 import com.cityguide.backend.entities.City;
 import com.cityguide.backend.entities.Question;
 import com.cityguide.backend.entities.User;
@@ -41,6 +42,19 @@ public class UserController {
     {
 
         return userServices.postques(requestTokenHeader,question);
+    }
+    //Api for posting answers
+    @RequestMapping(value = "/postans",method = RequestMethod.POST)
+    public ResponseEntity<Answer> postans(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Answer answer)
+    {
+
+        return userServices.postans(requestTokenHeader,answer);
+    }
+
+    //Api for get answers for a question
+    @RequestMapping(value = "/getanswers/{quesid}",method = RequestMethod.GET)
+    public ResponseEntity<Question> getanswers(@PathVariable("quesid") int ques_id){
+        return userServices.getanswers(ques_id);
     }
 
 
