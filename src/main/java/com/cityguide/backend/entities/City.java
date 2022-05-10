@@ -16,6 +16,8 @@ public class City {
 
     @Id
     String city_name;
+    String city_desc;
+    String city_image;
 
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "city_name",referencedColumnName = "city_name")
     List<Restaurant> restaurantList=new ArrayList<>();
