@@ -36,9 +36,10 @@ public class UserServices {
         Optional<User> check= userRepository.findById(user.getUsername());
         if(check.isPresent())
         {
-            return new ResponseEntity<>("User with username already Exists",HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("User with username already Exists", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>("User Signed In Successfully", HttpStatus.ACCEPTED);
+         userRepository.save(user);
+         return new ResponseEntity<>("User Signed In Successfully",HttpStatus.ACCEPTED);
     }
 
     //User Operations for Questions
