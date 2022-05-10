@@ -21,7 +21,7 @@ public class UserController {
     UserRepository userRepository;
 
     @RequestMapping(value = "/signup",method = RequestMethod.POST)
-    public ResponseEntity<User> signup(@RequestBody User user)
+    public ResponseEntity<String> signup(@RequestBody User user)
     {
         return userServices.signup(user);
     }
