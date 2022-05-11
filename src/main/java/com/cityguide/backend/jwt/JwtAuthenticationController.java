@@ -1,9 +1,12 @@
 package com.cityguide.backend.jwt;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 import com.cityguide.backend.entities.Loginobject;
+import com.cityguide.backend.entities.User;
+import com.cityguide.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +35,32 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Loginobject loginobject) throws Exception {
+        Optional<User> check = userRepository.findById(loginobject.getUsername());
+        if (check.isEmpty()) {
+            return new ResponseEntity<>("Username does not exist!", HttpStatus.FORBIDDEN);
+        } else if (check.isPresent()) {
+            User user = userRepository.findById(loginobject.getUsername()).get();
+            if (user.getPassword().equals(loginobject.getPassword())) {
+                authenticate(loginobject.getUsername(), loginobject.getPassword());
 
-        authenticate(loginobject.getUsername(), loginobject.getPassword());
+                final UserDetails userDetails = userDetailsService
+                        .loadUserByUsername(loginobject.getUsername());
 
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(loginobject.getUsername());
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
+                final String token = jwtTokenUtil.generateToken(userDetails);
 
 
-            return ResponseEntity.ok(new JwtResponse(token));
+                return ResponseEntity.ok(new JwtResponse(token));
+            }
+            else {
+                return new ResponseEntity<>("Wrong Password!", HttpStatus.FORBIDDEN);
+            }
+        }
+        else return new ResponseEntity<>("Something Went Wrong",HttpStatus.METHOD_FAILURE);
     }
 
     private void authenticate(String username, String password) throws Exception {
