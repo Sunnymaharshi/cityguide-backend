@@ -98,4 +98,11 @@ public class UserController {
     {
         return userServices.getuserdetails(requestToken);
     }
+
+    //get user username and password
+    @RequestMapping(value = "/auth",method = RequestMethod.GET)
+    public ResponseEntity<?> getusername(@RequestHeader("Authorization") String requestToken)
+    {
+        return userServices.getusername(requestToken);
+    }
 }

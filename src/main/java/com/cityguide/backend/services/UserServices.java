@@ -3,6 +3,7 @@ package com.cityguide.backend.services;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,18 @@ public class UserServices {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         return new ResponseEntity<>(userRepository.findById(user).get(),HttpStatus.OK);
+    }
+    public ResponseEntity<?> getusername(String requestTokenHeader)
+    {
+       try {
+            String jwtToken = requestTokenHeader.substring(7);
+            String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        }
+       catch (ExpiredJwtException e)
+       {
+           return new ResponseEntity<>("Token Expired",HttpStatus.OK);
+       }
     }
 
     //<------------------------------------------------------User Operations for Questions--------------------------------------------------->
