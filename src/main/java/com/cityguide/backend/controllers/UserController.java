@@ -1,9 +1,6 @@
 package com.cityguide.backend.controllers;
 
-import com.cityguide.backend.entities.Answer;
-import com.cityguide.backend.entities.City;
-import com.cityguide.backend.entities.Question;
-import com.cityguide.backend.entities.User;
+import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
@@ -53,8 +50,19 @@ public class UserController {
 
     //Api for get answers for a question
     @RequestMapping(value = "/getanswers/{quesid}",method = RequestMethod.GET)
-    public ResponseEntity<Question> getanswers(@PathVariable("quesid") int ques_id){
+    public ResponseEntity<List<Answer>> getanswers(@PathVariable("quesid") int ques_id){
         return userServices.getanswers(ques_id);
+    }
+
+    //Api for posting a comment
+    @RequestMapping(value = "/postcmnt",method = RequestMethod.POST)
+    public  ResponseEntity<Comment> postcmnt(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Comment comment){
+        return userServices.postcmnt(requestTokenHeader,comment);
+    }
+    //Api for getting all comments for an answer
+    @RequestMapping(value = "/getcmnts/{ansid}", method = RequestMethod.GET)
+    public ResponseEntity<List<Comment>> getcmnt(@PathVariable("ansid") int ans_id){
+        return userServices.getcmnts(ans_id);
     }
 
 

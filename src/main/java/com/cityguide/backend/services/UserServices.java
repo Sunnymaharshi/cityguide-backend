@@ -1,14 +1,8 @@
 package com.cityguide.backend.services;
 
-import com.cityguide.backend.entities.Answer;
-import com.cityguide.backend.entities.City;
-import com.cityguide.backend.entities.Question;
-import com.cityguide.backend.entities.User;
+import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
-import com.cityguide.backend.repositories.AnswerRepository;
-import com.cityguide.backend.repositories.CityRepository;
-import com.cityguide.backend.repositories.QuestionRepository;
-import com.cityguide.backend.repositories.UserRepository;
+import com.cityguide.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +22,9 @@ public class UserServices {
 
     @Autowired
     AnswerRepository answerRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -68,14 +65,32 @@ public class UserServices {
         return  new ResponseEntity<>(answerRepository.save(answer),HttpStatus.ACCEPTED);
     }
     //Api for getting all answers for a question
-     public ResponseEntity<Question> getanswers(int ques_id){
+     public ResponseEntity<List<Answer>> getanswers(int ques_id){
         try{
-            return new ResponseEntity<>(questionRepository.findById(ques_id).get(),HttpStatus.OK);
+            return new ResponseEntity<>(questionRepository.findById(ques_id).get().getAnswerList(),HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
      }
+     //User Service for posting comments
+    public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        comment.setUsername(user);
+        return new ResponseEntity<>(commentRepository.save(comment),HttpStatus.ACCEPTED);
+    }
+
+    //User Service for getting all comments for an answer
+    public ResponseEntity<List<Comment>> getcmnts(int ans_id){
+        try {
+            return new ResponseEntity<>(answerRepository.findById(ans_id).get().getCommentList(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return  new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     //User Operation for Cities
 
