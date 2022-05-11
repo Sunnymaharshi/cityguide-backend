@@ -12,10 +12,23 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @RequestMapping(value = "/addcity",method = RequestMethod.POST)
-    public ResponseEntity<City> addcity(@RequestHeader("Authorization") String requestToken, @RequestBody City city)
+
+    // CUD For Cities
+    @RequestMapping(value = "/addcity",method = RequestMethod.POST) //add city
+    public ResponseEntity<?> addcity(@RequestHeader("Authorization") String requestToken, @RequestBody City city)
     {
         return adminService.addcity(requestToken,city);
 
+    }
+    @RequestMapping(value = "/updatecity",method = RequestMethod.PUT) // update city
+    public ResponseEntity<?> updatecity(@RequestHeader("Authorization") String requestToken, @RequestBody City city)
+    {
+        return adminService.updatecity(requestToken,city);
+    }
+
+    @RequestMapping(value = "/deletecity/{city}",method = RequestMethod.DELETE) // delete city
+    public ResponseEntity<?> deletecity(@RequestHeader("Authorization") String requestToken, @PathVariable("city") String city)
+    {
+        return adminService.deletecity(requestToken,city);
     }
 }

@@ -42,7 +42,7 @@ public class JwtAuthenticationController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Loginobject loginobject) throws Exception {
         Optional<User> check = userRepository.findById(loginobject.getUsername());
         if (check.isEmpty()) {
-            return new ResponseEntity<>("Username does not exist!", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Username does not exist!", HttpStatus.OK);
         } else if (check.isPresent()) {
             User user = userRepository.findById(loginobject.getUsername()).get();
             if (user.getPassword().equals(loginobject.getPassword())) {
@@ -57,7 +57,7 @@ public class JwtAuthenticationController {
                 return ResponseEntity.ok(new JwtResponse(token));
             }
             else {
-                return new ResponseEntity<>("Wrong Password!", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Wrong Password!", HttpStatus.OK);
             }
         }
         else return new ResponseEntity<>("Something Went Wrong",HttpStatus.METHOD_FAILURE);
