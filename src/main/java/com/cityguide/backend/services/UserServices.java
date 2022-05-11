@@ -110,4 +110,14 @@ public class UserServices {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
     }
+    //Reading all restaurants by city name
+    public ResponseEntity<List<Restaurant>> getRestaurants(String city){
+        try {
+            return new ResponseEntity<>(cityRepository.findById(city).get().getRestaurantList(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+    }
+
 }

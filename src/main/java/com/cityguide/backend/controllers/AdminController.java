@@ -2,6 +2,7 @@ package com.cityguide.backend.controllers;
 
 import com.cityguide.backend.entities.Attractions;
 import com.cityguide.backend.entities.City;
+import com.cityguide.backend.entities.Restaurant;
 import com.cityguide.backend.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,6 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
-
-
     // CUD For Cities
     @RequestMapping(value = "/addcity",method = RequestMethod.POST) //add city
     public ResponseEntity<?> addcity(@RequestHeader("Authorization") String requestToken, @RequestBody City city)
@@ -33,11 +32,32 @@ public class AdminController {
         return adminService.deletecity(requestToken,city);
     }
 
+
     //CUD for Attractions
     @RequestMapping(value = "/addattr",method = RequestMethod.POST) //add attraction
-    public ResponseEntity<?> addattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction)
+    public ResponseEntity<?> addattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction) {
+        return adminService.addattr(requestToken, attraction);
+    }
+
+
+
+    //CUD for Rest
+    @RequestMapping(value = "/addrest",method = RequestMethod.POST) //add rest
+    public ResponseEntity<?> addrest(@RequestHeader("Authorization") String requestToken, @RequestBody Restaurant restaurant)
     {
-        return adminService.addattr(requestToken,attraction);
+        return adminService.addRestaurant(requestToken,restaurant);
+
+    }
+
+    @RequestMapping(value = "/updaterest",method = RequestMethod.PUT) // update rest
+    public ResponseEntity<?> updaterest(@RequestHeader("Authorization") String requestToken, @RequestBody Restaurant restaurant)
+    {
+        return adminService.updateRestaurant(requestToken,restaurant);
+    }
+
+    @RequestMapping(value = "/deleterest/{resid}",method = RequestMethod.DELETE) // delete rest
+    public ResponseEntity<?> deleterest(@RequestHeader("Authorization") String requestToken, @PathVariable("resid") int res_id) {
+        return adminService.deleteRestaurant(requestToken, res_id);
 
     }
 
