@@ -85,4 +85,10 @@ public class UserController {
     public  ResponseEntity<List<Restaurant>> getRestaurants(@PathVariable("city") String city){
         return userServices.getRestaurants(city);
     }
+    //Getting Attractions Api
+    @RequestMapping(value = "/getattr/{city}",method = RequestMethod.GET)
+    public  ResponseEntity<List<Attractions>> getattr(@PathVariable("city") String city){
+        return userServices.getattr(city);
+    }
+
 }

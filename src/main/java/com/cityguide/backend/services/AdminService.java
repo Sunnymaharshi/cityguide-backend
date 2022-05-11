@@ -37,7 +37,7 @@ public class AdminService {
     RestaurantRepository restaurantRepository;
 
 
-    //CRUD for Cities
+    //<---------------------------------------------CRUD for Cities--------------------------------------------------------------------------->
 
     public ResponseEntity<?> addcity(String requestTokenHeader,City city)//add city
     {
@@ -72,8 +72,15 @@ public class AdminService {
         User user1=userRepository.findById(user).get();
         if(user1.getRole().equalsIgnoreCase("Admin"))
         {
-            cityRepository.deleteById(city);
-            return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+            try {
+                cityRepository.deleteById(city);
+                return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+            }
+            catch (Exception e)
+            {
+                return new ResponseEntity<>("City Not Present",HttpStatus.OK);
+            }
+
         }
         else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -82,12 +89,58 @@ public class AdminService {
 
 
 
-    //CRUD for attractions
+    //<--------------------------------------------------------CRUD for attractions---------------------------------------------------------->
 
-    public ResponseEntity<?> addattr(String requestTokenHeader, Attractions attraction){
-    return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);}//add attraction
+    public ResponseEntity<?> addattr(String requestTokenHeader, Attractions attraction)//add attraction
+        {
+            String jwtToken = requestTokenHeader.substring(7);
+            String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            User user1=userRepository.findById(user).get();
+            if(user1.getRole().equalsIgnoreCase("Admin"))
+            {
+                return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
+            }
+            else {
+                return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+            }
+        }
 
-    //CRUD for Restaurants
+    public ResponseEntity<?> updateattr(String requestTokenHeader, Attractions attraction)//update attraction
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
+    }
+    public ResponseEntity<?> deleteattr(String requestTokenHeader,int attrid)//delete attractions
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            try {
+                attractionsRepository.deleteById(attrid);
+                return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+            }
+            catch (Exception e)
+            {
+                return new ResponseEntity<>("Attraction Not Present",HttpStatus.OK);
+            }
+
+        }
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    //<--------------------------------------------------------CRUD for Restaurants----------------------------------------------------------->
     //Adding Restaurant
     public ResponseEntity<?> addRestaurant(String requestTokenHeader, Restaurant restaurant){
         String jwtToken=requestTokenHeader.substring(7);

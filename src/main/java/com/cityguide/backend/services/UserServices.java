@@ -44,7 +44,7 @@ public class UserServices {
          return new ResponseEntity<>("User Signed In Successfully",HttpStatus.ACCEPTED);
     }
 
-    //User Operations for Questions
+    //<------------------------------------------------------User Operations for Questions--------------------------------------------------->
 
     public ResponseEntity<Question> postques(String requestTokenHeader, Question question)
     {
@@ -55,7 +55,7 @@ public class UserServices {
         return  new ResponseEntity<>(questionRepository.save(question),HttpStatus.ACCEPTED);
     }
 
-    //User Operations for Answers
+    //<--------------------------------------------------------User Operations for Answers---------------------------------------------------->
     public ResponseEntity<Answer> postans(String requestTokenHeader, Answer answer)
     {
         String jwtToken = requestTokenHeader.substring(7);
@@ -73,7 +73,7 @@ public class UserServices {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
      }
-     //User Service for posting comments
+     //<-------------------------------------------------------User Service for posting comments----------------------------------------------->
     public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -92,7 +92,7 @@ public class UserServices {
     }
 
 
-    //User Operation for Cities
+    //<----------------------------------------------------------User Operation for Cities------------------------------------------->
 
     public ResponseEntity<List<City>> getcities() //get All cities
     {
@@ -116,7 +116,16 @@ public class UserServices {
             return new ResponseEntity<>(cityRepository.findById(city).get().getRestaurantList(), HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    //Get all Attractions of a city
+    public ResponseEntity<List<Attractions>> getattr(String city){
+        try {
+            return new ResponseEntity<>(cityRepository.findById(city).get().getAttractionsList(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

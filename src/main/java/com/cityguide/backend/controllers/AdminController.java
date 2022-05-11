@@ -13,7 +13,8 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
-    // CUD For Cities
+    // <-------------------------------------------------------CUD For Cities---------------------------------------------------------->
+
     @RequestMapping(value = "/addcity",method = RequestMethod.POST) //add city
     public ResponseEntity<?> addcity(@RequestHeader("Authorization") String requestToken, @RequestBody City city)
     {
@@ -33,20 +34,27 @@ public class AdminController {
     }
 
 
-    //CUD for Attractions
+    //<---------------------------------------------------------CUD for Attractions---------------------------------------------------->
+
     @RequestMapping(value = "/addattr",method = RequestMethod.POST) //add attraction
     public ResponseEntity<?> addattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction) {
         return adminService.addattr(requestToken, attraction);
     }
+    @RequestMapping(value = "/updateattr",method = RequestMethod.PUT) //update attraction
+    public ResponseEntity<?> updateattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction) {
+        return adminService.addattr(requestToken, attraction);
+    }
+    @RequestMapping(value = "/deleteattr/{attrid}",method = RequestMethod.DELETE) //delete attraction
+    public ResponseEntity<?> deleteattr(@RequestHeader("Authorization") String requestToken, @PathVariable("attrid") int attrid) {
+        return adminService.deleteattr(requestToken, attrid);
+    }
 
+    //<---------------------------------------------------------CUD for Rest------------------------------------------------------------>
 
-
-    //CUD for Rest
     @RequestMapping(value = "/addrest",method = RequestMethod.POST) //add rest
     public ResponseEntity<?> addrest(@RequestHeader("Authorization") String requestToken, @RequestBody Restaurant restaurant)
     {
         return adminService.addRestaurant(requestToken,restaurant);
-
     }
 
     @RequestMapping(value = "/updaterest",method = RequestMethod.PUT) // update rest
@@ -58,7 +66,6 @@ public class AdminController {
     @RequestMapping(value = "/deleterest/{resid}",method = RequestMethod.DELETE) // delete rest
     public ResponseEntity<?> deleterest(@RequestHeader("Authorization") String requestToken, @PathVariable("resid") int res_id) {
         return adminService.deleteRestaurant(requestToken, res_id);
-
     }
 
 }
