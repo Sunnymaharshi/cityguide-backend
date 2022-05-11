@@ -1,5 +1,6 @@
 package com.cityguide.backend.controllers;
 
+import com.cityguide.backend.entities.Attractions;
 import com.cityguide.backend.entities.City;
 import com.cityguide.backend.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,13 @@ public class AdminController {
     {
         return adminService.deletecity(requestToken,city);
     }
+
+    //CUD for Attractions
+    @RequestMapping(value = "/addattr",method = RequestMethod.POST) //add attraction
+    public ResponseEntity<?> addattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction)
+    {
+        return adminService.addattr(requestToken,attraction);
+
+    }
+
 }

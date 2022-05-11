@@ -1,8 +1,10 @@
 package com.cityguide.backend.services;
 
+import com.cityguide.backend.entities.Attractions;
 import com.cityguide.backend.entities.City;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
+import com.cityguide.backend.repositories.AttractionsRepository;
 import com.cityguide.backend.repositories.CityRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class AdminService {
 
     @Autowired
     CityRepository cityRepository;
+
+    @Autowired
+    AttractionsRepository attractionsRepository;
 
     //CRUD for Cities
 
@@ -65,5 +70,21 @@ public class AdminService {
         }
     }
 
+
+    //CRUD for attractions
+
+    public ResponseEntity<?> addattr(String requestTokenHeader, Attractions attraction)//add attraction
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
+    }
 
 }
