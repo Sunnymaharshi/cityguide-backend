@@ -79,4 +79,10 @@ public class UserController {
     {
         return userServices.getcity(city);
     }
+
+    //Getting Restaurants Api
+    @RequestMapping(value = "/getrest/{city}",method = RequestMethod.GET)
+    public  ResponseEntity<List<Restaurant>> getRestaurants(@PathVariable("city") String city){
+        return userServices.getRestaurants(city);
+    }
 }
