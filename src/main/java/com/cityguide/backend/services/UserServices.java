@@ -43,6 +43,12 @@ public class UserServices {
          userRepository.save(user);
          return new ResponseEntity<>("User Signed In Successfully",HttpStatus.ACCEPTED);
     }
+    public ResponseEntity<?> getuserdetails(String requestTokenHeader)
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        return new ResponseEntity<>(userRepository.findById(user).get(),HttpStatus.OK);
+    }
 
     //<------------------------------------------------------User Operations for Questions--------------------------------------------------->
 

@@ -91,4 +91,11 @@ public class UserController {
         return userServices.getattr(city);
     }
 
+
+    //getting user details Api
+    @RequestMapping(value = "/getuserdetails",method = RequestMethod.GET)
+    public ResponseEntity<?> getuserdetails(@RequestHeader("Authorization") String requestToken)
+    {
+        return userServices.getuserdetails(requestToken);
+    }
 }
