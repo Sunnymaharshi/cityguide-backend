@@ -33,7 +33,7 @@ public class AdminService {
 
     //CRUD for Cities
 
-    public ResponseEntity<City> addcity(String requestTokenHeader,City city)
+    public ResponseEntity<?> addcity(String requestTokenHeader,City city)//add city
     {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -43,9 +43,37 @@ public class AdminService {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         }
         else {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
+    public ResponseEntity<?> updatecity(String requestTokenHeader,City city)//update city
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
+    }
+    public ResponseEntity<?> deletecity(String requestTokenHeader,String city)//delete city
+    {
+        String jwtToken = requestTokenHeader.substring(7);
+        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        if(user1.getRole().equalsIgnoreCase("Admin"))
+        {
+            cityRepository.deleteById(city);
+            return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
+    }
+
 
     //CRUD for Restaurants
     //Adding Restaurant
