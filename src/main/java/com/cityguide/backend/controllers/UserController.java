@@ -33,7 +33,7 @@ public class UserController {
 
 
 
-    // Operations for Questions
+    //<-----------------------------------------------------------Operations for Questions----------------------------------------------------->
     @RequestMapping(value = "/postques",method = RequestMethod.POST)
     public ResponseEntity<Question> postques(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Question question)
     {
@@ -46,6 +46,13 @@ public class UserController {
     public ResponseEntity<?> delques(@RequestHeader("Authorization") String requestTokenHeader, @PathVariable("quesid") int ques_id){
         return userServices.delques(requestTokenHeader,ques_id);
     }
+
+    @RequestMapping(value = "/getques",method = RequestMethod.GET)
+    public ResponseEntity<?> getques(@RequestHeader("Authorization") String RequestTokenHeader)
+    {
+        return userServices.getuserques(RequestTokenHeader);
+    }
+    //<------------------------------------------------------------Operation for Answers------------------------------------------------------->
     //Api for posting answers
     @RequestMapping(value = "/postans",method = RequestMethod.POST)
     public ResponseEntity<Answer> postans(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Answer answer)
@@ -73,6 +80,7 @@ public class UserController {
         return userServices.updateans(requestToken, answer);
     }
 
+    //<----------------------------------------------------------Operation For Comments----------------------------------------------------->
     //Api for posting a comment
     @RequestMapping(value = "/postcmnt",method = RequestMethod.POST)
     public  ResponseEntity<Comment> postcmnt(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Comment comment){
@@ -83,9 +91,20 @@ public class UserController {
     public ResponseEntity<List<Comment>> getcmnt(@PathVariable("ansid") int ans_id){
         return userServices.getcmnts(ans_id);
     }
+    //deleting comments
+    @RequestMapping(value = "/deletecomm/{commid}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delcmnt(@RequestHeader("Authorization") String requestTokenHeader,@PathVariable("commid") int commid){
+        return userServices.delcomm(requestTokenHeader,commid);
+    }
+    //update comments
+    @RequestMapping(value = "/updatecmnt",method = RequestMethod.POST)
+    public  ResponseEntity<?> updatecmnt(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Comment comment){
+        return userServices.updatecmnt(requestTokenHeader,comment);
+    }
 
 
-    //User operations for Cities
+
+    //<---------------------------------------------------------User operations for Cities,Rest,Attr--------------------------------------------------->
 
     @RequestMapping(value = "/getallcities",method = RequestMethod.GET)
     public ResponseEntity<List<City>> getcities()
@@ -110,7 +129,7 @@ public class UserController {
         return userServices.getattr(city);
     }
 
-
+  //<---------------------------------------------------------User Details------------------------------------------------------------------------------>
     //getting user details Api
     @RequestMapping(value = "/getuserdetails",method = RequestMethod.GET)
     public ResponseEntity<?> getuserdetails(@RequestHeader("Authorization") String requestToken)

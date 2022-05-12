@@ -87,13 +87,22 @@ public class UserServices {
             return  new  ResponseEntity<>("Question Deleted",HttpStatus.ACCEPTED);
         }
         catch (Exception e){
-            return new ResponseEntity<>("Deleted!",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Question Not Found",HttpStatus.NOT_FOUND);
         }
         }
         else{
             return new ResponseEntity<>("Unauthorized!", HttpStatus.FORBIDDEN);
         }
     }
+
+    public ResponseEntity<?> getuserques(String requestTokenHeader)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        return new ResponseEntity<>(user1.getQuestionList(),HttpStatus.OK);
+    }
+
 
 
 
@@ -125,11 +134,11 @@ public class UserServices {
          Answer user2= answerRepository.findById(ans_id).get();
          if(user1.getUsername().equals(user2.getUsername())){
              try{
-                 questionRepository.deleteById(ans_id);
+                 answerRepository.deleteById(ans_id);
                  return  new  ResponseEntity<>("Answer Deleted",HttpStatus.ACCEPTED);
              }
              catch (Exception e){
-                 return new ResponseEntity<>("Deleted!",HttpStatus.NOT_FOUND);
+                 return new ResponseEntity<>("Answer Not Found",HttpStatus.NOT_FOUND);
              }
          }
          else{
@@ -161,8 +170,8 @@ public class UserServices {
              return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
          }
      }
-     //<-------------------------------------------------------User Service for posting comments----------------------------------------------->
-    public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){
+     //<-------------------------------------------------------User Service for  comments----------------------------------------------->
+    public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){//posting comments
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         comment.setUsername(user);
@@ -176,6 +185,40 @@ public class UserServices {
         }
         catch (Exception e){
             return  new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //deleting comments
+    public ResponseEntity<?> delcomm(String requestTokenHeader, int comm_id){
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        Answer user2= answerRepository.findById(comm_id).get();
+        if(user1.getUsername().equals(user2.getUsername())){
+            try{
+                commentRepository.deleteById(comm_id);
+                return  new  ResponseEntity<>("Comment Deleted",HttpStatus.ACCEPTED);
+            }
+            catch (Exception e){
+                return new ResponseEntity<>("Comment Not found",HttpStatus.NOT_FOUND);
+            }
+        }
+        else{
+            return new ResponseEntity<>("Unauthorized!", HttpStatus.FORBIDDEN);
+        }
+    }
+    //update comments
+    public ResponseEntity<?> updatecmnt(String requestTokenHeader, Comment comment){
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        comment.setUsername(user);
+        Comment c=commentRepository.findById(comment.getComm_id()).get();
+        if(user.equals(c.getUsername())) {
+            return new ResponseEntity<>(commentRepository.save(comment), HttpStatus.ACCEPTED);
+        }
+        else
+        {
+            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
         }
     }
 

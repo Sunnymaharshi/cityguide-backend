@@ -37,7 +37,7 @@ public class AdminService {
     RestaurantRepository restaurantRepository;
 
 
-    //<---------------------------------------------CRUD for Cities--------------------------------------------------------------------------->
+    //<------------------------------------------------------------------CRUD for Cities--------------------------------------------------------------------------->
 
     public ResponseEntity<?> addcity(String requestTokenHeader,City city)//add city
     {
