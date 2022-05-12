@@ -65,6 +65,7 @@ public class UserServices {
 
     //<------------------------------------------------------User Operations for Questions--------------------------------------------------->
 
+    //posting question
     public ResponseEntity<Question> postques(String requestTokenHeader, Question question)
     {
         String jwtToken = requestTokenHeader.substring(7);
@@ -73,6 +74,30 @@ public class UserServices {
         question.setUsername(user);
         return  new ResponseEntity<>(questionRepository.save(question),HttpStatus.ACCEPTED);
     }
+
+    //deleting question
+    public ResponseEntity<?> delques(String requestTokenHeader, int ques_id){
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User user1=userRepository.findById(user).get();
+        Question user2= questionRepository.findById(ques_id).get();
+        if(user1.getUsername().equals(user2.getUsername())){
+        try{
+            questionRepository.deleteById(ques_id);
+            return  new  ResponseEntity<>("Question Deleted",HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>("Deleted!",HttpStatus.NOT_FOUND);
+        }
+        }
+        else{
+            return new ResponseEntity<>("Unauthorized!", HttpStatus.FORBIDDEN);
+        }
+    }
+
+
+
+
 
     //<--------------------------------------------------------User Operations for Answers---------------------------------------------------->
     public ResponseEntity<Answer> postans(String requestTokenHeader, Answer answer)
@@ -91,6 +116,50 @@ public class UserServices {
         catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
+     }
+     //Api for deleting Answer
+     public ResponseEntity<?> delans(String requestTokenHeader, int ans_id){
+         String jwtToken=requestTokenHeader.substring(7);
+         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+         User user1=userRepository.findById(user).get();
+         Answer user2= answerRepository.findById(ans_id).get();
+         if(user1.getUsername().equals(user2.getUsername())){
+             try{
+                 questionRepository.deleteById(ans_id);
+                 return  new  ResponseEntity<>("Answer Deleted",HttpStatus.ACCEPTED);
+             }
+             catch (Exception e){
+                 return new ResponseEntity<>("Deleted!",HttpStatus.NOT_FOUND);
+             }
+         }
+         else{
+             return new ResponseEntity<>("Unauthorized!", HttpStatus.FORBIDDEN);
+         }
+     }
+
+     //Api for updating Answer
+     public ResponseEntity<?> updateans(String requestTokenHeader,Answer answer)
+     {
+         String jwtToken = requestTokenHeader.substring(7);
+         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+         User user1=userRepository.findById(user).get();
+         Answer user2= answerRepository.findById(answer.getAns_id()).get();
+         if(user1.getUsername().equals(user2.getUsername()))
+         {
+             Answer answer1= new Answer();
+             answer1.setUsername(user2.getUsername());
+             answer1.setAns_id(answer.getAns_id());
+             answer1.setQues_id(user2.getQues_id());
+             answer1.setDescription(answer.getDescription());
+             answer1.setDownvotes(user2.getDownvotes());
+             answer1.setUpvotes(user2.getUpvotes());
+             answer1.setFreq(user2.getFreq());
+             answer1.setCommentList(user2.getCommentList());
+             return new ResponseEntity<>(answerRepository.save(answer1), HttpStatus.ACCEPTED);
+         }
+         else {
+             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+         }
      }
      //<-------------------------------------------------------User Service for posting comments----------------------------------------------->
     public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){

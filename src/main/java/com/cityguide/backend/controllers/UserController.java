@@ -40,6 +40,12 @@ public class UserController {
 
         return userServices.postques(requestTokenHeader,question);
     }
+
+    //delete question Api
+    @RequestMapping(value = "/delques/{quesid}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delques(@RequestHeader("Authorization") String requestTokenHeader, @PathVariable("quesid") int ques_id){
+        return userServices.delques(requestTokenHeader,ques_id);
+    }
     //Api for posting answers
     @RequestMapping(value = "/postans",method = RequestMethod.POST)
     public ResponseEntity<Answer> postans(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Answer answer)
@@ -52,6 +58,19 @@ public class UserController {
     @RequestMapping(value = "/getanswers/{quesid}",method = RequestMethod.GET)
     public ResponseEntity<List<Answer>> getanswers(@PathVariable("quesid") int ques_id){
         return userServices.getanswers(ques_id);
+    }
+
+    //Api for deleting answer
+    @RequestMapping(value = "/deleteans/{ansid}",method = RequestMethod.DELETE) // delete city
+    public ResponseEntity<?> deleteans(@RequestHeader("Authorization") String requestToken, @PathVariable("ansid") int ans_id)
+    {
+        return userServices.delans(requestToken, ans_id);
+    }
+    //Api for updating answer
+    @RequestMapping(value = "/updateans",method = RequestMethod.PUT) // update city
+    public ResponseEntity<?> updateans(@RequestHeader("Authorization") String requestToken, @RequestBody Answer answer)
+    {
+        return userServices.updateans(requestToken, answer);
     }
 
     //Api for posting a comment
