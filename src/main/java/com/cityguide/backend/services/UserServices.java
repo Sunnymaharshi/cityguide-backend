@@ -193,7 +193,7 @@ public class UserServices {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        Answer user2= answerRepository.findById(comm_id).get();
+        Comment user2= commentRepository.findById(comm_id).get();
         if(user1.getUsername().equals(user2.getUsername())){
             try{
                 commentRepository.deleteById(comm_id);
@@ -211,9 +211,10 @@ public class UserServices {
     public ResponseEntity<?> updatecmnt(String requestTokenHeader, Comment comment){
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        comment.setUsername(user);
         Comment c=commentRepository.findById(comment.getComm_id()).get();
         if(user.equals(c.getUsername())) {
+            comment.setUsername(user);
+            comment.setAns_id(c.getAns_id());
             return new ResponseEntity<>(commentRepository.save(comment), HttpStatus.ACCEPTED);
         }
         else
