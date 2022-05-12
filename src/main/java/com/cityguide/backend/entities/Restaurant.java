@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 public class Restaurant {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.TABLE)
     int res_id;
     String res_name;
     String res_location;

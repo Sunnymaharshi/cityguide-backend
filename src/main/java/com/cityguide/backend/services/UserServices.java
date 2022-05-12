@@ -131,7 +131,14 @@ public class UserServices {
          String jwtToken=requestTokenHeader.substring(7);
          String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
          User user1=userRepository.findById(user).get();
-         Answer user2= answerRepository.findById(ans_id).get();
+         Answer user2;
+         try {
+              user2 = answerRepository.findById(ans_id).get();
+         }
+         catch (Exception e)
+         {
+             return new ResponseEntity<>("Answer Not Found",HttpStatus.NOT_FOUND);
+         }
          if(user1.getUsername().equals(user2.getUsername())){
              try{
                  answerRepository.deleteById(ans_id);

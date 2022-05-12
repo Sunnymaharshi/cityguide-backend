@@ -180,8 +180,16 @@ public class AdminService {
 
 
 
-            restaurantRepository.deleteById(res_id);
-            return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+            try {
+
+
+                restaurantRepository.deleteById(res_id);
+                return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
+            }
+            catch (Exception e)
+            {
+                return new ResponseEntity<>("Not Found", HttpStatus.NOT_FOUND);
+            }
         }
         else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
