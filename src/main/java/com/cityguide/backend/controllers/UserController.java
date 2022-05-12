@@ -97,7 +97,7 @@ public class UserController {
         return userServices.delcomm(requestTokenHeader,commid);
     }
     //update comments
-    @RequestMapping(value = "/updatecmnt",method = RequestMethod.POST)
+    @RequestMapping(value = "/updatecmnt",method = RequestMethod.PUT)
     public  ResponseEntity<?> updatecmnt(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Comment comment){
         return userServices.updatecmnt(requestTokenHeader,comment);
     }
