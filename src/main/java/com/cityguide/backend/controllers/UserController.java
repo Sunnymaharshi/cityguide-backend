@@ -68,13 +68,13 @@ public class UserController {
     }
 
     //Api for deleting answer
-    @RequestMapping(value = "/deleteans/{ansid}",method = RequestMethod.DELETE) // delete city
+    @RequestMapping(value = "/deleteans/{ansid}",method = RequestMethod.DELETE) // delete ANS
     public ResponseEntity<?> deleteans(@RequestHeader("Authorization") String requestToken, @PathVariable("ansid") int ans_id)
     {
         return userServices.delans(requestToken, ans_id);
     }
     //Api for updating answer
-    @RequestMapping(value = "/updateans",method = RequestMethod.PUT) // update city
+    @RequestMapping(value = "/updateans",method = RequestMethod.PUT) // update ans
     public ResponseEntity<?> updateans(@RequestHeader("Authorization") String requestToken, @RequestBody Answer answer)
     {
         return userServices.updateans(requestToken, answer);
@@ -86,7 +86,7 @@ public class UserController {
     public  ResponseEntity<Comment> postcmnt(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Comment comment){
         return userServices.postcmnt(requestTokenHeader,comment);
     }
-    //Api for getting all comments for an answer
+    //Api for getting all comments for an comment
     @RequestMapping(value = "/getcmnts/{ansid}", method = RequestMethod.GET)
     public ResponseEntity<List<Comment>> getcmnt(@PathVariable("ansid") int ans_id){
         return userServices.getcmnts(ans_id);
@@ -145,5 +145,29 @@ public class UserController {
     public ResponseEntity<?> getusername(@RequestHeader("Authorization") String requestToken)
     {
         return userServices.getusername(requestToken);
+    }
+
+    //-------------------------------------------------------Upvote,DownVote----------------------------------------------------------------------------->
+    @RequestMapping(value = "/upvote",method = RequestMethod.PUT)
+    public ResponseEntity<?> upvote(@RequestHeader("Authorization") String requestToken,@RequestParam("ansid") int ansid)
+    {
+        return userServices.upvote(requestToken,ansid);
+    }
+
+    @RequestMapping(value = "/downvote",method = RequestMethod.PUT)
+    public ResponseEntity<?> downvote(@RequestHeader("Authorization") String requestToken,@RequestParam("ansid") int ansid)
+    {
+        return userServices.downvote(requestToken,ansid);
+    }
+
+
+    
+
+    //--------------------------------------------------------Get Similar Questions---------------------------------------------------------------------- >
+
+    @RequestMapping(value = "/getsimques",method = RequestMethod.GET)
+    public ResponseEntity<?> getuserdetails(@RequestParam("city") String city,@RequestParam("query") String query)
+    {
+        return userServices.getsimilarques(query,city);
     }
 }

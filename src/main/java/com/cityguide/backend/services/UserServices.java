@@ -34,6 +34,12 @@ public class UserServices {
     @Autowired
     CityRepository cityRepository;
 
+    @Autowired
+    UpvoteRepository upvoteRepository;
+
+    @Autowired
+    DownvoteRepository downvoteRepository;
+
 
     public ResponseEntity<String> signup(User user)
     {
@@ -279,6 +285,74 @@ public class UserServices {
         catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    //<---------------------------------------------------Upvote,DownVote-------------------------------------------------------------->
+    public ResponseEntity<?> upvote(String requestTokenHeader,int ansid)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        try {
+            Upvote upvote = new Upvote();
+            upvote.setAns_id(ansid);
+            upvote.setUsername(user);
+            upvoteRepository.save(upvote);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("User Can Upvote Only Once",HttpStatus.OK);
+        }
+
+        Answer answer=answerRepository.findById(ansid).get();
+        answer.setUpvotes(answer.getUpvotes()+1);
+        answerRepository.save(answer);
+        return  new ResponseEntity<>("Upvoted!!",HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> downvote(String requestTokenHeader,int ansid)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        try {
+            Downvote downvote=new Downvote();
+            downvote.setAns_id(ansid);
+            downvote.setUsername(user);
+            downvoteRepository.save(downvote);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("User Can Downvote Only Once",HttpStatus.OK);
+        }
+
+        Answer answer=answerRepository.findById(ansid).get();
+        answer.setDownvotes(answer.getDownvotes()+1);
+        answerRepository.save(answer);
+        return  new ResponseEntity<>("Downvoted!!",HttpStatus.OK);
+    }
+
+
+    //--------------------------------------------------------------Get Similar Questions----------------------------------------------------------------->
+    public ResponseEntity<?> getsimilarques(String query,String city)
+    {
+       List<Question> questionList=cityRepository.findById(city).get().getQuestionList();
+       List<Question> displaylist=new ArrayList<>();
+       String words[]=query.split(" ");
+       for(Question question:questionList) {
+           int hit = 0;
+           if (question.getDescription().contains(query)) {
+               displaylist.add(question);
+           } else {
+               for (String word : words) {
+                   if (question.getDescription().contains(word)) {
+                       hit++;
+                   }
+               }
+               if (hit > (words.length / 2)) {
+                   displaylist.add(question);
+               }
+           }
+       }
+       return new ResponseEntity<>(displaylist,HttpStatus.OK);
     }
 
 }
