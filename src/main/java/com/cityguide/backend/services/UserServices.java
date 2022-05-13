@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -248,6 +249,16 @@ public class UserServices {
         {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
+    }
+
+    //get all city names
+    public ResponseEntity<?> getCityNames(){
+        List<City> cityList=cityRepository.findAll();
+        List<String > citynames=new ArrayList<>();
+        for(City c: cityList){
+            citynames.add(c.getCity_name());
+        }
+        return new ResponseEntity<>(citynames,HttpStatus.OK);
     }
     //Reading all restaurants by city name
     public ResponseEntity<List<Restaurant>> getRestaurants(String city){

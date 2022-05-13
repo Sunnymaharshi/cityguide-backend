@@ -112,6 +112,9 @@ public class UserController {
         return userServices.getcities();
     }
 
+    @RequestMapping(value = "/getcitynames", method = RequestMethod.GET)
+    public ResponseEntity<?> getcitynames(){return userServices.getCityNames();}
+
     @RequestMapping(value = "/getcity/{city}",method = RequestMethod.GET)
     public ResponseEntity<City> getcities(@PathVariable("city") String city)
     {
