@@ -55,7 +55,9 @@ public class UserServices {
        try {
             String jwtToken = requestTokenHeader.substring(7);
             String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            return new ResponseEntity<>(user,HttpStatus.OK);
+            User curruser=userRepository.findById(user).get();
+            Authobject authobject=new Authobject(curruser.getUsername(), curruser.getRole());
+            return new ResponseEntity<>(authobject,HttpStatus.OK);
         }
        catch (ExpiredJwtException e)
        {
