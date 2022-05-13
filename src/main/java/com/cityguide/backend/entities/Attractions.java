@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 public class Attractions {
 
-    @Id @GeneratedValue(strategy = GenerationType.TABLE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     int attr_id;
     String attr_name;
     String attr_loc;
