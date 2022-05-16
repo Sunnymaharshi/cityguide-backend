@@ -1,9 +1,6 @@
 package com.cityguide.backend.services;
 
-import com.cityguide.backend.entities.Attractions;
-import com.cityguide.backend.entities.City;
-import com.cityguide.backend.entities.Restaurant;
-import com.cityguide.backend.entities.User;
+import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.AttractionsRepository;
 import com.cityguide.backend.repositories.CityRepository;
@@ -44,7 +41,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         }
@@ -57,7 +54,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         }
@@ -70,7 +67,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             try {
                 cityRepository.deleteById(city);
@@ -96,7 +93,7 @@ public class AdminService {
             String jwtToken = requestTokenHeader.substring(7);
             String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
             User user1=userRepository.findById(user).get();
-            if(user1.getRole().equalsIgnoreCase("Admin"))
+            if(user1.getRole()==Role.Admin)
             {
                 return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
             }
@@ -110,7 +107,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
         }
@@ -123,7 +120,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             try {
                 attractionsRepository.deleteById(attrid);
@@ -146,7 +143,7 @@ public class AdminService {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin")){
+        if(user1.getRole()==Role.Admin){
             return new ResponseEntity<>(restaurantRepository.save(restaurant),HttpStatus.ACCEPTED);
         }
         else{
@@ -160,7 +157,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
             return new ResponseEntity<>(restaurantRepository.save(restaurant), HttpStatus.ACCEPTED);
         }
@@ -175,7 +172,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole().equalsIgnoreCase("Admin"))
+        if(user1.getRole()==Role.Admin)
         {
 
 

@@ -17,7 +17,7 @@ public class User {
     @Id
     String username;
     String password;
-    String role="User";
+    Role role=Role.User;
     String emailid;
     String mob_no;
     String name;
