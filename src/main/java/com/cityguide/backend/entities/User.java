@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class User {
     @Id
     String username;
     String password;
-    Role role=Role.User;
+    String role=Role.USER;
     String emailid;
     String mob_no;
     String name;

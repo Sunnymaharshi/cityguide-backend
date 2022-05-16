@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Authobject {
     String username;
-    Role role;
+    String role;
 }

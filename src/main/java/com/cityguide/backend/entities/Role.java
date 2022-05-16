@@ -1,6 +1,8 @@
 package com.cityguide.backend.entities;
 
-public enum Role {
-    User,
-    Admin
+public class Role {
+
+    public static String ADMIN = "Admin";
+    public static String USER =  "User";
+
 }

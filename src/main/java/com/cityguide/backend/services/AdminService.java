@@ -41,7 +41,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         }
@@ -54,7 +54,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         }
@@ -67,7 +67,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             try {
                 cityRepository.deleteById(city);
@@ -93,7 +93,7 @@ public class AdminService {
             String jwtToken = requestTokenHeader.substring(7);
             String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
             User user1=userRepository.findById(user).get();
-            if(user1.getRole()==Role.Admin)
+            if(user1.getRole()==Role.ADMIN)
             {
                 return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
             }
@@ -107,7 +107,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
         }
@@ -120,7 +120,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             try {
                 attractionsRepository.deleteById(attrid);
@@ -143,7 +143,7 @@ public class AdminService {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin){
+        if(user1.getRole()==Role.ADMIN){
             return new ResponseEntity<>(restaurantRepository.save(restaurant),HttpStatus.ACCEPTED);
         }
         else{
@@ -157,7 +157,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
             return new ResponseEntity<>(restaurantRepository.save(restaurant), HttpStatus.ACCEPTED);
         }
@@ -172,7 +172,7 @@ public class AdminService {
         String jwtToken = requestTokenHeader.substring(7);
         String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
-        if(user1.getRole()==Role.Admin)
+        if(user1.getRole()==Role.ADMIN)
         {
 
 
