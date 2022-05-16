@@ -29,6 +29,4 @@ public class Answer {
 
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "ans_id",referencedColumnName = "ans_id")
     List<Comment> commentList=new ArrayList<>();
-
-
 }
