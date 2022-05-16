@@ -3,12 +3,14 @@ name: Build and Deploy to Cloud Run
 on:
     push:
         branches:
-            - main
+            - master
 
 # Environment variables available to all jobs and steps in this workflow
 env:
-    PROJECT_ID: us-gcp-ame-con-116-npd-1
+    PROJECT_ID: project us-gcp-ame-con-116-npd-1
     SERVICE_NAME: hu-may-prod-city-guide-backend
+
+jobs:
 
   build:
     name: Cloud Run Deploy
@@ -45,4 +47,4 @@ env:
    
       - name: Deploy
         run: |    
-            gcloud run deploy $SERVICE_NAME --port=8080 --image gcr.io/us-gcp-ame-con-116-npd-1/$SERVICE_NAME --min-instances 1 --max-instances 3 --memory 2000Mi --platform managed --region us-west2 --allow-unauthenticated  --vpc-connector='hu-conn' --add-cloudsql-instances='huex-mysql' --set-env-vars=[DBN='cityguide']
+            gcloud run deploy $SERVICE_NAME --image gcr.io/us-gcp-ame-con-116-npd-1/$SERVICE_NAME --min-instances 1 --max-instances 3 --memory 2000Mi --platform managed --region us-west2 --allow-unauthenticated  --vpc-connector='hu-conn' --add-cloudsql-instances='huex-mysql' --set-env-vars=[DBN='cityguide']
