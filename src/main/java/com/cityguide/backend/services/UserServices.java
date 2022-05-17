@@ -74,6 +74,13 @@ public class UserServices {
 
     //<------------------------------------------------------User Operations for Questions--------------------------------------------------->
 
+
+    // get all questions
+    public ResponseEntity<?> getAllQuestions(String city){
+        List<Question> questionList=cityRepository.findById(city).get().getQuestionList();
+        return new ResponseEntity<>(questionList,HttpStatus.OK);
+    }
+
     //posting question
     public ResponseEntity<Question> postques(String requestTokenHeader, Question question)
     {

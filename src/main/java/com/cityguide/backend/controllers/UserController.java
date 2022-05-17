@@ -47,10 +47,16 @@ public class UserController {
         return userServices.delques(requestTokenHeader,ques_id);
     }
 
-    @RequestMapping(value = "/getques",method = RequestMethod.GET)
-    public ResponseEntity<?> getques(@RequestHeader("Authorization") String RequestTokenHeader)
+    @RequestMapping(value = "/getUserQues",method = RequestMethod.GET)
+    public ResponseEntity<?> getUserques(@RequestHeader("Authorization") String RequestTokenHeader)
     {
         return userServices.getuserques(RequestTokenHeader);
+    }
+
+    @RequestMapping(value = "/getAllQues/{city}",method = RequestMethod.GET)
+    public ResponseEntity<?> getAllQues(@PathVariable("city") String city)
+    {
+        return userServices.getAllQuestions(city);
     }
     //<------------------------------------------------------------Operation for Answers------------------------------------------------------->
     //Api for posting answers
