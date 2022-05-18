@@ -16,6 +16,7 @@ public class Attractions {
     int attr_id;
     String attr_name;
     String attr_loc;
+    String attr_img;
 
     @Column(name = "city_name")
     String city_name;

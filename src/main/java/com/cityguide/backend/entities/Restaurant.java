@@ -16,6 +16,8 @@ public class Restaurant {
     int res_id;
     String res_name;
     String res_location;
+    String res_image;
+
 
     @Column(name = "city_name")
     String city_name;
