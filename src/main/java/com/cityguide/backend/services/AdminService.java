@@ -139,6 +139,12 @@ public class AdminService {
         }
     }
 
+    //get All Attractions
+    public ResponseEntity<?> getAttraction(){
+        return new ResponseEntity<>(attractionsRepository.findAll(),HttpStatus.OK);
+    }
+
+
     //<--------------------------------------------------------CRUD for Restaurants----------------------------------------------------------->
     //Adding Restaurant
     public ResponseEntity<?> addRestaurant(String requestTokenHeader, Restaurant restaurant){
@@ -193,6 +199,11 @@ public class AdminService {
         else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
+    }
+
+    //get All Restaurants
+    public ResponseEntity<?> getRestaurant(){
+        return new ResponseEntity<>(restaurantRepository.findAll(),HttpStatus.OK);
     }
 
 }

@@ -58,6 +58,11 @@ public class UserController {
     {
         return userServices.getAllQuestions(city);
     }
+    @RequestMapping(value = "/getQues/{id}",method = RequestMethod.GET)
+    public ResponseEntity<?> getQues(@PathVariable("id") int id)
+    {
+        return userServices.getQuestions(id);
+    }
     //<------------------------------------------------------------Operation for Answers------------------------------------------------------->
     //Api for posting answers
     @RequestMapping(value = "/postans",method = RequestMethod.POST)
@@ -69,7 +74,7 @@ public class UserController {
 
     //Api for get answers for a question
     @RequestMapping(value = "/getanswers/{quesid}",method = RequestMethod.GET)
-    public ResponseEntity<List<Answer>> getanswers(@PathVariable("quesid") int ques_id){
+    public ResponseEntity<?> getanswers(@PathVariable("quesid") int ques_id){
         return userServices.getanswers(ques_id);
     }
 

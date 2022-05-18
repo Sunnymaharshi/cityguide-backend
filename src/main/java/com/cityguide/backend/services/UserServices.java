@@ -1,5 +1,7 @@
 package com.cityguide.backend.services;
 
+import com.cityguide.backend.CustomResponses.mAnswer;
+import com.cityguide.backend.CustomResponses.mQuestion;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
@@ -78,7 +80,24 @@ public class UserServices {
     // get all questions
     public ResponseEntity<?> getAllQuestions(String city){
         List<Question> questionList=cityRepository.findById(city).get().getQuestionList();
-        return new ResponseEntity<>(questionList,HttpStatus.OK);
+        List<mQuestion> display=new ArrayList<>();
+        for (Question q:questionList)
+        {
+            display.add(new mQuestion(q.getQues_id(),q.getDescription(),q.getUsername(),q.getCity_name()));
+        }
+
+        return new ResponseEntity<>(display,HttpStatus.OK);
+    }
+    //get ques by id
+    public ResponseEntity<?> getQuestions(int id){
+        try {
+
+            return new ResponseEntity<>(questionRepository.findById(id).get(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        }
     }
 
     //posting question
@@ -134,9 +153,15 @@ public class UserServices {
         return  new ResponseEntity<>(answerRepository.save(answer),HttpStatus.ACCEPTED);
     }
     //Api for getting all answers for a question
-     public ResponseEntity<List<Answer>> getanswers(int ques_id){
+     public ResponseEntity<?> getanswers(int ques_id){
         try{
-            return new ResponseEntity<>(questionRepository.findById(ques_id).get().getAnswerList(),HttpStatus.OK);
+            List<Answer> answerList=questionRepository.findById(ques_id).get().getAnswerList();
+            List<mAnswer> display=new ArrayList<>();
+            for(Answer a:answerList)
+            {
+                display.add(new mAnswer(a.getAns_id(),a.getDescription(),a.getFreq(),a.getUpvotes(),a.getDownvotes(),a.getQues_id(),a.getUsername()));
+            }
+            return new ResponseEntity<>(display,HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);

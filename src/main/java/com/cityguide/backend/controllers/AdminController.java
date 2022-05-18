@@ -36,6 +36,12 @@ public class AdminController {
 
     //<---------------------------------------------------------CUD for Attractions---------------------------------------------------->
 
+    @RequestMapping(value = "/getattr",method = RequestMethod.GET) //add rest
+    public ResponseEntity<?> getattr()
+    {
+        return adminService.getAttraction();
+    }
+
     @RequestMapping(value = "/addattr",method = RequestMethod.POST) //add attraction
     public ResponseEntity<?> addattr(@RequestHeader("Authorization") String requestToken, @RequestBody Attractions attraction) {
         return adminService.addattr(requestToken, attraction);
@@ -50,6 +56,12 @@ public class AdminController {
     }
 
     //<---------------------------------------------------------CUD for Rest------------------------------------------------------------>
+
+    @RequestMapping(value = "/getrest",method = RequestMethod.GET) //add rest
+    public ResponseEntity<?> getrest()
+    {
+        return adminService.getRestaurant();
+    }
 
     @RequestMapping(value = "/addrest",method = RequestMethod.POST) //add rest
     public ResponseEntity<?> addrest(@RequestHeader("Authorization") String requestToken, @RequestBody Restaurant restaurant)
