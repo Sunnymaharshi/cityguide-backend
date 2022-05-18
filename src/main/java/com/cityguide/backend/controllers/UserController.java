@@ -171,6 +171,12 @@ public class UserController {
         return userServices.downvote(requestToken,ansid);
     }
 
+    @RequestMapping(value = "/checkvote/{ansid}",method = RequestMethod.GET)
+    public ResponseEntity<?> check(@RequestHeader("Authorization") String requestToken,@PathVariable("ansid") int ansid)
+    {
+        return userServices.check(requestToken,ansid);
+    }
+
 
     
 

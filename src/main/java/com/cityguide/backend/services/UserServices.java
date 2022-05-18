@@ -1,5 +1,6 @@
 package com.cityguide.backend.services;
 
+import com.cityguide.backend.CustomResponses.checkvotes;
 import com.cityguide.backend.CustomResponses.mAnswer;
 import com.cityguide.backend.CustomResponses.mQuestion;
 import com.cityguide.backend.entities.*;
@@ -328,6 +329,18 @@ public class UserServices {
             Upvote upvote = new Upvote();
             upvote.setAns_id(ansid);
             upvote.setUsername(user);
+            Optional<Downvote> check = downvoteRepository.findUserDownvote(user, ansid);
+            if (check.isPresent()) {
+                Answer answer = answerRepository.findById(ansid).get();
+                answer.setDownvotes(answer.getDownvotes() - 1);
+                answer.setUpvotes(answer.getUpvotes()+1);
+                answerRepository.save(answer);
+                Downvote d=downvoteRepository.findDownvote(user,ansid);
+                downvoteRepository.delete(d);
+                upvoteRepository.save(upvote);
+                return new ResponseEntity<>("Upvoted!!", HttpStatus.OK);
+            }
+
             upvoteRepository.save(upvote);
         }
         catch (Exception e)
@@ -337,6 +350,7 @@ public class UserServices {
 
         Answer answer=answerRepository.findById(ansid).get();
         answer.setUpvotes(answer.getUpvotes()+1);
+
         answerRepository.save(answer);
         return  new ResponseEntity<>("Upvoted!!",HttpStatus.OK);
     }
@@ -346,10 +360,22 @@ public class UserServices {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         try {
-            Downvote downvote=new Downvote();
+            Downvote downvote = new Downvote();
             downvote.setAns_id(ansid);
             downvote.setUsername(user);
-            downvoteRepository.save(downvote);
+            Optional<Upvote> check = upvoteRepository.findUserUpvote(user, ansid);
+            if (check.isPresent()) {
+                Answer answer = answerRepository.findById(ansid).get();
+                answer.setUpvotes(answer.getUpvotes() - 1);
+                answer.setDownvotes(answer.getDownvotes()+1);
+                answerRepository.save(answer);
+                Upvote v=upvoteRepository.findUpvote(user,ansid);
+                upvoteRepository.delete(v);
+                downvoteRepository.save(downvote);
+                return new ResponseEntity<>("Downvoted!!", HttpStatus.OK);
+            } else {
+                downvoteRepository.save(downvote);
+            }
         }
         catch (Exception e)
         {
@@ -361,6 +387,31 @@ public class UserServices {
         answerRepository.save(answer);
         return  new ResponseEntity<>("Downvoted!!",HttpStatus.OK);
     }
+
+    public ResponseEntity<?> check(String requestTokenHeader,int ansid)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        checkvotes c=new checkvotes();
+        Optional<Upvote> h=upvoteRepository.findUserUpvote(user,ansid);
+        Optional<Downvote> d=downvoteRepository.findUserDownvote(user,ansid);
+        if(h.isPresent())
+        {
+            c.setHasupvoted(true);
+            return new ResponseEntity<>(c,HttpStatus.OK);
+        }
+        else if(d.isPresent())
+        {
+            c.setHasdownvoted(true);
+            return new ResponseEntity<>(c,HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>(c,HttpStatus.OK);
+        }
+
+    }
+
 
 
     //--------------------------------------------------------------Get Similar Questions----------------------------------------------------------------->
