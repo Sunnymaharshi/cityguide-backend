@@ -29,4 +29,10 @@ public class City {
 
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "city_name",referencedColumnName = "city_name")
     List<Question> questionList=new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "city_name",referencedColumnName = "city_name")
+    List<BusMap> busMapList=new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "city_name",referencedColumnName = "city_name")
+    List<MetroMap> metroMapList=new ArrayList<>();
 }

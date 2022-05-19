@@ -2,6 +2,7 @@ package com.cityguide.backend.services;
 
 import com.cityguide.backend.CustomResponses.checkvotes;
 import com.cityguide.backend.CustomResponses.mAnswer;
+import com.cityguide.backend.CustomResponses.mCity;
 import com.cityguide.backend.CustomResponses.mQuestion;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
@@ -326,6 +327,20 @@ public class UserServices {
         catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+    //get only city data by name
+    public ResponseEntity<?> getmcity(String cityname){
+
+        try {
+            City city=cityRepository.findById(cityname).get();
+            mCity display=new mCity(city.getCity_name(),city.getCity_desc(),city.getCity_image());
+            return new ResponseEntity<>(display,HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("City Not Found",HttpStatus.NOT_FOUND);
+        }
+
     }
 
     //<---------------------------------------------------Upvote,DownVote-------------------------------------------------------------->

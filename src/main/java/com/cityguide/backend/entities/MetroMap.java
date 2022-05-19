@@ -10,14 +10,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class BusMap {
+public class MetroMap {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int busmap_id;
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    int metromap_id;
 
-    String busmap_img;
+    String metromap_img;
 
     @Column(name = "city_name")
     String city_name;
-
 }
