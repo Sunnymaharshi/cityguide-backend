@@ -345,7 +345,12 @@ public class UserServices {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>("User Can Upvote Only Once",HttpStatus.OK);
+            Upvote u=upvoteRepository.findUpvote(user,ansid);
+            upvoteRepository.delete(u);
+            Answer answer=answerRepository.findById(ansid).get();
+            answer.setUpvotes(answer.getUpvotes()-1);
+            answerRepository.save(answer);
+            return new ResponseEntity<>("Upvote Removed!!",HttpStatus.OK);
         }
 
         Answer answer=answerRepository.findById(ansid).get();
@@ -379,7 +384,12 @@ public class UserServices {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>("User Can Downvote Only Once",HttpStatus.OK);
+            Downvote d=downvoteRepository.findDownvote(user,ansid);
+            downvoteRepository.delete(d);
+            Answer answer=answerRepository.findById(ansid).get();
+            answer.setDownvotes(answer.getDownvotes()-1);
+            answerRepository.save(answer);
+            return new ResponseEntity<>("Downvote Removed!",HttpStatus.OK);
         }
 
         Answer answer=answerRepository.findById(ansid).get();
