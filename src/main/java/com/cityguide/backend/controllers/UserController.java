@@ -159,14 +159,14 @@ public class UserController {
     }
 
     //-------------------------------------------------------Upvote,DownVote----------------------------------------------------------------------------->
-    @RequestMapping(value = "/upvote",method = RequestMethod.PUT)
-    public ResponseEntity<?> upvote(@RequestHeader("Authorization") String requestToken,@RequestParam("ansid") int ansid)
+    @RequestMapping(value = "/upvote/{ansid}",method = RequestMethod.PUT)
+    public ResponseEntity<?> upvote(@RequestHeader("Authorization") String requestToken,@PathVariable("ansid") int ansid)
     {
         return userServices.upvote(requestToken,ansid);
     }
 
-    @RequestMapping(value = "/downvote",method = RequestMethod.PUT)
-    public ResponseEntity<?> downvote(@RequestHeader("Authorization") String requestToken,@RequestParam("ansid") int ansid)
+    @RequestMapping(value = "/downvote/{ansid}",method = RequestMethod.PUT)
+    public ResponseEntity<?> downvote(@RequestHeader("Authorization") String requestToken,@PathVariable("ansid") int ansid)
     {
         return userServices.downvote(requestToken,ansid);
     }
@@ -182,8 +182,8 @@ public class UserController {
 
     //--------------------------------------------------------Get Similar Questions---------------------------------------------------------------------- >
 
-    @RequestMapping(value = "/getsimques",method = RequestMethod.GET)
-    public ResponseEntity<?> getuserdetails(@RequestParam("city") String city,@RequestParam("query") String query)
+    @RequestMapping(value = "/getsimques/{city}/{query}",method = RequestMethod.GET)
+    public ResponseEntity<?> getuserdetails(@PathVariable("city") String city,@PathVariable("query") String query)
     {
         return userServices.getsimilarques(query,city);
     }
