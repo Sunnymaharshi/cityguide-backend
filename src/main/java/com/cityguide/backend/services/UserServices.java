@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServices {
@@ -87,6 +85,13 @@ public class UserServices {
         {
             display.add(new mQuestion(q.getQues_id(),q.getDescription(),q.getUsername(),q.getCity_name()));
         }
+        Collections.sort(display,new Comparator<mQuestion>(){
+            @Override
+            public int compare(mQuestion q1,mQuestion q2)
+            {
+                return Integer.compare(q2.getQues_id(), q1.getQues_id());
+            }
+        });
 
         return new ResponseEntity<>(display,HttpStatus.OK);
     }
@@ -159,10 +164,18 @@ public class UserServices {
         try{
             List<Answer> answerList=questionRepository.findById(ques_id).get().getAnswerList();
             List<mAnswer> display=new ArrayList<>();
+
             for(Answer a:answerList)
             {
                 display.add(new mAnswer(a.getAns_id(),a.getDescription(),a.getFreq(),a.getUpvotes(),a.getDownvotes(),a.getQues_id(),a.getUsername()));
             }
+            Collections.sort(display,new Comparator<mAnswer>(){
+                @Override
+                public int compare(mAnswer a1,mAnswer a2)
+                {
+                    return Integer.compare(a2.getAns_id(), a1.getAns_id());
+                }
+            });
             return new ResponseEntity<>(display,HttpStatus.OK);
         }
         catch (Exception e){
@@ -239,7 +252,15 @@ public class UserServices {
     //User Service for getting all comments for an answer
     public ResponseEntity<List<Comment>> getcmnts(int ans_id){
         try {
-            return new ResponseEntity<>(answerRepository.findById(ans_id).get().getCommentList(), HttpStatus.OK);
+            List<Comment> commentList=answerRepository.findById(ans_id).get().getCommentList();
+            Collections.sort(commentList,new Comparator<Comment>(){
+                @Override
+                public int compare(Comment c1,Comment c2)
+                {
+                    return Integer.compare(c2.getComm_id(), c1.getComm_id());
+                }
+            });
+            return new ResponseEntity<>(commentList, HttpStatus.OK);
         }
         catch (Exception e){
             return  new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
