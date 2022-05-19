@@ -219,6 +219,14 @@ public class UserServices {
              return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
          }
      }
+
+     //get ans by id
+     public ResponseEntity<?> getansbyid(int ansid)
+     {
+         Answer answer=answerRepository.findById(ansid).get();
+         mAnswer display=new mAnswer(answer.getAns_id(),answer.getDescription(),answer.getFreq(),answer.getUpvotes(),answer.getDownvotes(),answer.getQues_id(),answer.getUsername());
+         return new ResponseEntity<>(display,HttpStatus.OK);
+     }
      //<-------------------------------------------------------User Service for  comments----------------------------------------------->
     public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){//posting comments
         String jwtToken=requestTokenHeader.substring(7);

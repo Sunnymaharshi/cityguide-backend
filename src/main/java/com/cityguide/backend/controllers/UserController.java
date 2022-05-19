@@ -91,6 +91,12 @@ public class UserController {
         return userServices.updateans(requestToken, answer);
     }
 
+    @RequestMapping(value = "/getanswer/{ansid}",method = RequestMethod.GET) //get ans by id
+    public ResponseEntity<?> getanswer(@PathVariable("ansid") int ans_id){
+        return userServices.getansbyid(ans_id);
+    }
+
+
     //<----------------------------------------------------------Operation For Comments----------------------------------------------------->
     //Api for posting a comment
     @RequestMapping(value = "/postcmnt",method = RequestMethod.POST)
