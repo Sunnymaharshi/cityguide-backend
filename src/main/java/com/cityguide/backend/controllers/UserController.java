@@ -220,11 +220,12 @@ public class UserController {
         String fileName = fileStream.getOriginalFilename() ;
 
         File file = multipartToFile( fileStream,fileName) ;
+        String k="rtt";
 
         BlobInfo blobInfo =
                 storage.create(
                         BlobInfo
-                                .newBuilder(bucketName, fileName)
+                                .newBuilder(bucketName,k+"/"+fileName)
                                 .build(),
                                 file.toURL().openStream()
                 );
