@@ -20,10 +20,12 @@ import javax.servlet.ServletException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.google.cloud.storage.Acl.User.ofAllUsers;
 
@@ -213,7 +215,7 @@ public class UserController {
     //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
 
     @RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
-    public String uploadFile(@RequestParam("image") MultipartFile fileStream)
+    public URL uploadFile(@RequestParam("image") MultipartFile fileStream)
             throws IOException, ServletException {
 
         String bucketName = "may-cityguide";
@@ -229,8 +231,13 @@ public class UserController {
                                 .build(),
                                 file.toURL().openStream()
                 );
+
+        URL url =
+                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+
         System.out.println(blobInfo.getMediaLink());
-        return blobInfo.getMediaLink();
+        return url;
     }
 
 
