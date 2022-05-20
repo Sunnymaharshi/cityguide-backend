@@ -17,6 +17,8 @@ public class City {
     @Id
     String city_name;
 
+    String city_tagline;
+
     String city_desc;
 
     String city_image;

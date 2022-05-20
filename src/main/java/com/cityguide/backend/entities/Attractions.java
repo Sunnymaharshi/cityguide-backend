@@ -15,6 +15,7 @@ public class Attractions {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int attr_id;
     String attr_name;
+    String description;
     String attr_loc;
     String attr_img;
 

@@ -19,7 +19,8 @@ public class Question {
     int ques_id;
     String description;
 
-
+    String category;
+    int freq=0;
 
     @Column(name = "username")
     String username;

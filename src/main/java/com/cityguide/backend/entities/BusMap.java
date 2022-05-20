@@ -16,6 +16,7 @@ public class BusMap {
     int busmap_id;
 
     String busmap_img;
+    String description;
 
     @Column(name = "city_name")
     String city_name;

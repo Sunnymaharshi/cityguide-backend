@@ -15,6 +15,7 @@ public class Restaurant {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int res_id;
     String res_name;
+    String description;
     String res_location;
     String res_image;
 
