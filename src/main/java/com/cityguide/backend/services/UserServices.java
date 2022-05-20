@@ -472,12 +472,12 @@ public class UserServices {
     public ResponseEntity<?> getsimilarques(String query,String city)
     {
        List<Question> questionList=cityRepository.findById(city).get().getQuestionList();
-       List<Question> displaylist=new ArrayList<>();
+       List<mQuestion> displaylist=new ArrayList<>();
        String words[]=query.split(" ");
        for(Question question:questionList) {
            int hit = 0;
            if (question.getDescription().contains(query)) {
-               displaylist.add(question);
+               displaylist.add(new mQuestion(question.getQues_id(),question.getDescription(),question.getUsername(),question.getCity_name()));
            } else {
                for (String word : words) {
                    if (question.getDescription().contains(word)) {
@@ -485,7 +485,7 @@ public class UserServices {
                    }
                }
                if (hit > (words.length / 2)) {
-                   displaylist.add(question);
+                   displaylist.add(new mQuestion(question.getQues_id(),question.getDescription(),question.getUsername(),question.getCity_name()));
                }
            }
        }
