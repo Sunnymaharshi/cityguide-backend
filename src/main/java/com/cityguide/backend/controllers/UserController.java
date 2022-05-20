@@ -217,8 +217,8 @@ public class UserController {
             throws IOException, ServletException {
 
         String bucketName = "may-cityguide";
-        checkFileExtension(fileStream.getName());
-        String fileName = fileStream.getName() ;
+        checkFileExtension(fileStream.getOriginalFilename());
+        String fileName = fileStream.getOriginalFilename() ;
 
         File file = multipartToFile( fileStream,fileName) ;
 
