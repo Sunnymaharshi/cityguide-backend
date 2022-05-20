@@ -5,12 +5,20 @@ import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.UserServices;
-//import com.google.cloud.ReadChannel;
-//import com.google.cloud.storage.Storage;
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.protobuf.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -27,8 +35,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-//    @Autowired
-//    Storage storage;
+    @Autowired
+    Storage storage;
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -193,43 +201,54 @@ public class UserController {
     public ResponseEntity<?> getuserdetails(@PathVariable("city") String city, @PathVariable("query") String query) {
         return userServices.getsimilarques(query, city);
     }
+
+
+
+
+    //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
+
+    @RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
+    public String uploadFile(@RequestParam("image") MultipartFile fileStream)
+            throws IOException, ServletException {
+
+        String bucketName = "may-cityguide";
+        checkFileExtension(fileStream.getName());
+        final String fileName = fileStream.getName() ;
+
+        File file = convertMultiPartToFile( fileStream );
+
+        BlobInfo blobInfo =
+                storage.create(
+                        BlobInfo
+                                .newBuilder(bucketName, fileName)
+                                .build()
+                        //                     file.openStream()
+                );
+        System.out.println(blobInfo.getMediaLink());
+        return blobInfo.getMediaLink();
+    }
+
+
+    private File convertMultiPartToFile(MultipartFile file ) throws IOException
+    {
+        File convFile = new File( file.getOriginalFilename() );
+        FileOutputStream fos = new FileOutputStream( convFile );
+        fos.write( file.getBytes() );
+        fos.close();
+        return convFile;
+    }
+
+
+    private void checkFileExtension(String fileName) throws ServletException {
+        if (fileName != null && !fileName.isEmpty() && fileName.contains(".")) {
+            String[] allowedExt = {".jpg", ".jpeg", ".png", ".gif"};
+            for (String ext : allowedExt) {
+                if (fileName.endsWith(ext)) {
+                    return;
+                }
+            }
+            throw new ServletException("file must be an image");
+        }
+    }
 }
 
-
-
-    //----------------------------------------------------------XXXXXXXXXXXXXXXXXXXXXX-------------------------------------------------------------------->
-
-//    @RequestMapping(path = { "/hello" }, method = { RequestMethod.GET })
-//    public Message readFromFile() throws Exception {
-//
-//        StringBuilder sb = new StringBuilder();
-//
-//        try (ReadChannel channel = storage.reader("may-cityguide",)) {
-//            ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
-//            while (channel.read(bytes) > 0) {
-//                bytes.flip();
-//                String data = new String(bytes.array(), 0, bytes.limit());
-//                sb.append(data);
-//                bytes.clear();
-//            }
-//        }
-//
-//        Message message = new Message();
-//        message.setContents(sb.toString());
-//
-//        return message;
-//    }
-//}
-//
-//class Message {
-//    private String contents;
-//
-//    public String getContents() {
-//        return contents;
-//    }
-//
-//    public void setContents(String contents) {
-//        this.contents = contents;
-//    }
-//
-//}
