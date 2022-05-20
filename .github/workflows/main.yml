@@ -47,4 +47,4 @@ jobs:
    
       - name: Deploy
         run: |    
-            gcloud run deploy $SERVICE_NAME --image gcr.io/us-gcp-ame-con-116-npd-1/$SERVICE_NAME --min-instances 1 --max-instances 3 --memory 2000Mi --platform managed --region us-west2 --allow-unauthenticated  --vpc-connector='hu-conn' --add-cloudsql-instances='huex-mysql' --set-env-vars=[DBN='cityguide']
+            gcloud run deploy $SERVICE_NAME --image gcr.io/us-gcp-ame-con-116-npd-1/$SERVICE_NAME --min-instances 1 --max-instances 3 --memory 2000Mi --platform managed --region us-west2 --allow-unauthenticated  --vpc-connector='hu-conn' --add-cloudsql-instances='huex-mysql' --service-account=${{ secrets.SA_EMAIL }} --set-env-vars=[DBN='cityguide'] 
