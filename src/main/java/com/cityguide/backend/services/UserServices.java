@@ -354,7 +354,7 @@ public class UserServices {
 
         try {
             City city=cityRepository.findById(cityname).get();
-            mCity display=new mCity(city.getCity_name(),city.getCity_desc(),city.getCity_image());
+            mCity display=new mCity(city.getCity_name(),city.getCity_desc(),city.getCity_image(),city.getCity_tagline());
             return new ResponseEntity<>(display,HttpStatus.OK);
         }
         catch (Exception e)
