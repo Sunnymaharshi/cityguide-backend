@@ -6,6 +6,7 @@ import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.UserServices;
 import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -20,7 +21,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.google.cloud.storage.Acl.User.ofAllUsers;
 
 @RestController
 public class UserController {
@@ -213,30 +218,35 @@ public class UserController {
 
         String bucketName = "may-cityguide";
         checkFileExtension(fileStream.getName());
-        final String fileName = fileStream.getName() ;
+        String fileName = fileStream.getName() ;
 
-        File file = convertMultiPartToFile( fileStream );
+        File file = multipartToFile( fileStream,fileName) ;
 
         BlobInfo blobInfo =
                 storage.create(
                         BlobInfo
                                 .newBuilder(bucketName, fileName)
-                                .build()
-                        //                     file.openStream()
+                                .build(),
+                                file.toURL().openStream()
                 );
         System.out.println(blobInfo.getMediaLink());
         return blobInfo.getMediaLink();
     }
 
 
-    private File convertMultiPartToFile(MultipartFile file ) throws IOException
-    {
-        File convFile = new File( file.getOriginalFilename() );
-        FileOutputStream fos = new FileOutputStream( convFile );
-        fos.write( file.getBytes() );
-        fos.close();
-        return convFile;
-    }
+//    private File convertMultiPartToFile(MultipartFile file ) throws IOException
+//    {
+//        File convFile = new File( file.getOriginalFilename());
+//        FileOutputStream fos = new FileOutputStream( convFile );
+//        fos.write( file.getBytes() );
+//        fos.close();
+//        return convFile;
+//    }
+public  static File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
+    File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+fileName);
+    multipart.transferTo(convFile);
+    return convFile;
+}
 
 
     private void checkFileExtension(String fileName) throws ServletException {
