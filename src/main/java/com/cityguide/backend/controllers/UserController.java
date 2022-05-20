@@ -6,10 +6,7 @@ import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.UserServices;
 import com.google.cloud.ReadChannel;
-import com.google.cloud.storage.Acl;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import com.google.protobuf.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -215,7 +212,7 @@ public class UserController {
     //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
 
     @RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
-    public URL uploadFile(@RequestParam("image") MultipartFile fileStream)
+    public String uploadFile(@RequestParam("image") MultipartFile fileStream)
             throws IOException, ServletException {
 
         String bucketName = "may-cityguide";
@@ -231,13 +228,15 @@ public class UserController {
                                 .build(),
                                 file.toURL().openStream()
                 );
+//        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, fileName)).build();
 
-        URL url =
-                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+//        URL url =
+//                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
 
         System.out.println(blobInfo.getMediaLink());
-        return url;
+        return blobInfo.getMediaLink();
     }
 
 
@@ -267,5 +266,29 @@ public  static File multipartToFile(MultipartFile multipart, String fileName) th
             throw new ServletException("file must be an image");
         }
     }
+
+
+
+    @RequestMapping(value = "/geturl/{object-name}",method = RequestMethod.GET)
+    public static URL generateV4GetObjectSignedUrl(
+           @PathVariable("object-name") String objectName) throws StorageException {
+         String projectId = "us-gcp-ame-con-116-npd-1";
+         String bucketName = "may-cityguide";
+
+        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+
+        // Define resource
+        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, objectName)).build();
+
+        URL url =
+                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+        System.out.println("Generated GET signed URL:");
+        System.out.println(url);
+        System.out.println("You can use this URL with any user agent, for example:");
+        System.out.println("curl '" + url + "'");
+        return url;
+    }
 }
+
 
