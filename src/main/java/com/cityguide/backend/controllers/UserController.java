@@ -5,9 +5,9 @@ import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.QuestionRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.UserServices;
-//import com.google.cloud.ReadChannel;
-//import com.google.cloud.storage.*;
-//import com.google.protobuf.Message;
+import com.google.cloud.ReadChannel;
+import com.google.cloud.storage.*;
+import com.google.protobuf.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-//import static com.google.cloud.storage.Acl.User.ofAllUsers;
+import static com.google.cloud.storage.Acl.User.ofAllUsers;
 
 @RestController
 public class UserController {
@@ -39,8 +39,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-//    @Autowired
-//    Storage storage;
+    @Autowired
+    Storage storage;
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -212,89 +212,87 @@ public class UserController {
     }
 
 
-
-
     //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
 
-//    @RequestMapping(method = RequestMethod.POST, value = "/imageUpload/{city}")
-//    public String uploadFile(@RequestParam("image") MultipartFile fileStream,@PathVariable("city") String city)
-//            throws IOException, ServletException {
-//
-//        String bucketName = "may-cityguide";
-//        checkFileExtension(fileStream.getOriginalFilename());
-//        String fileName = fileStream.getOriginalFilename() ;
-//
-//        File file = multipartToFile( fileStream,fileName) ;
-//        String folder=city;
-//
-//        BlobInfo blobInfo =
-//                storage.create(
-//                        BlobInfo
-//                                .newBuilder(bucketName,folder+"/"+fileName)
-//                                .build(),
-//                                file.toURL().openStream()
-//                );
-////        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, fileName)).build();
-//
-//
-////        URL url =
-////                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
-//
-//
-//        System.out.println(blobInfo.getMediaLink());
-//        return blobInfo.getMediaLink();
-//    }
-//
-//
-////    private File convertMultiPartToFile(MultipartFile file ) throws IOException
-////    {
-////        File convFile = new File( file.getOriginalFilename());
-////        FileOutputStream fos = new FileOutputStream( convFile );
-////        fos.write( file.getBytes() );
-////        fos.close();
-////        return convFile;
-////    }
-//public  static File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
-//    File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+fileName);
-//    multipart.transferTo(convFile);
-//    return convFile;
-//}
-//
-//
-//    private void checkFileExtension(String fileName) throws ServletException {
-//        if (fileName != null && !fileName.isEmpty() && fileName.contains(".")) {
-//            String[] allowedExt = {".jpg", ".jpeg", ".png", ".gif"};
-//            for (String ext : allowedExt) {
-//                if (fileName.endsWith(ext)) {
-//                    return;
-//                }
-//            }
-//            throw new ServletException("file must be an image");
-//        }
-//    }
-//
-//
-//
-//    @RequestMapping(value = "/geturl/{city}/{object-name}",method = RequestMethod.GET)
-//    public static URL generateV4GetObjectSignedUrl(
-//           @PathVariable("object-name") String objectName,@PathVariable("city") String city) throws StorageException {
-//         String projectId = "us-gcp-ame-con-116-npd-1";
-//         String bucketName = "may-cityguide";
-//
-//        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
-//
-//        // Define resource
-//        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, city+"/"+objectName)).build();
-//
+    @RequestMapping(method = RequestMethod.POST, value = "/imageUpload/{city}")
+    public String uploadFile(@RequestParam("image") MultipartFile fileStream, @PathVariable("city") String city)
+            throws IOException, ServletException {
+
+        String bucketName = "may-cityguide";
+        checkFileExtension(fileStream.getOriginalFilename());
+        String fileName = fileStream.getOriginalFilename();
+
+        File file = multipartToFile(fileStream, fileName);
+        String folder = city;
+
+        BlobInfo blobInfo =
+                storage.create(
+                        BlobInfo
+                                .newBuilder(bucketName, folder + "/" + fileName)
+                                .build(),
+                        file.toURL().openStream()
+                );
+//        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, fileName)).build();
+
+
 //        URL url =
-//                storage.signUrl(blobInfo, 10080, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
-//
-//        System.out.println("Generated GET signed URL:");
-//        System.out.println(url);
-//        System.out.println("You can use this URL with any user agent, for example:");
-//        System.out.println("curl '" + url + "'");
-//        return url;
+//                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+
+        System.out.println(blobInfo.getMediaLink());
+        return blobInfo.getMediaLink();
+    }
+
+
+    //    private File convertMultiPartToFile(MultipartFile file ) throws IOException
+//    {
+//        File convFile = new File( file.getOriginalFilename());
+//        FileOutputStream fos = new FileOutputStream( convFile );
+//        fos.write( file.getBytes() );
+//        fos.close();
+//        return convFile;
 //    }
+    public static File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
+        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + fileName);
+        multipart.transferTo(convFile);
+        return convFile;
+    }
+
+
+    private void checkFileExtension(String fileName) throws ServletException {
+        if (fileName != null && !fileName.isEmpty() && fileName.contains(".")) {
+            String[] allowedExt = {".jpg", ".jpeg", ".png", ".gif"};
+            for (String ext : allowedExt) {
+                if (fileName.endsWith(ext)) {
+                    return;
+                }
+            }
+            throw new ServletException("file must be an image");
+        }
+    }
+
+
+    @RequestMapping(value = "/geturl/{city}/{object-name}", method = RequestMethod.GET)
+    public static URL generateV4GetObjectSignedUrl(
+            @PathVariable("object-name") String objectName, @PathVariable("city") String city) throws StorageException {
+        String projectId = "us-gcp-ame-con-116-npd-1";
+        String bucketName = "may-cityguide";
+
+        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+
+        // Define resource
+        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, city + "/" + objectName)).build();
+
+        URL url =
+                storage.signUrl(blobInfo, 10080, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+        System.out.println("Generated GET signed URL:");
+        System.out.println(url);
+        System.out.println("You can use this URL with any user agent, for example:");
+        System.out.println("curl '" + url + "'");
+        return url;
+    }
 }
-//
-//
+
+
+
