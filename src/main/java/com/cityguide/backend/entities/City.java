@@ -22,8 +22,10 @@ public class City {
     String filename;
 
 
+    @Column(columnDefinition = "TEXT")
     String city_desc;
 
+    @Column(columnDefinition = "TEXT")
     String city_image;
 
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "city_name",referencedColumnName = "city_name")

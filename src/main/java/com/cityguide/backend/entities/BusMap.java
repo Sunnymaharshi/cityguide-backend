@@ -15,7 +15,10 @@ public class BusMap {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int busmap_id;
 
+    @Column(columnDefinition = "TEXT")
     String busmap_img;
+
+    @Column(columnDefinition = "TEXT")
     String description;
     String filename;
 

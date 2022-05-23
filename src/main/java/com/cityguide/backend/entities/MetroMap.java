@@ -14,8 +14,13 @@ public class MetroMap {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     int metromap_id;
+
+    @Column(columnDefinition = "TEXT")
     String description;
+
+    @Column(columnDefinition = "TEXT")
     String metromap_img;
+
     String filename;
 
     @Column(name = "city_name")

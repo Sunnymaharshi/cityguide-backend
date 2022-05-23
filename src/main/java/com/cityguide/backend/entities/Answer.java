@@ -18,6 +18,7 @@ public class Answer {
     int ans_id;
 
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     int freq=0;

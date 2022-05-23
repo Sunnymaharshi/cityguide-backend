@@ -18,9 +18,12 @@ public class Attractions {
     String filename;
 
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     String attr_loc;
+
+    @Column(columnDefinition = "TEXT")
     String attr_img;
 
     @Column(name = "city_name")

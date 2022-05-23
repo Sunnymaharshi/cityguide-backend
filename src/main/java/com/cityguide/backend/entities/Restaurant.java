@@ -18,9 +18,12 @@ public class Restaurant {
     String filename;
 
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     String res_location;
+
+    @Column(columnDefinition = "TEXT")
     String res_image;
 
 

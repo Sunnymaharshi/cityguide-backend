@@ -15,6 +15,7 @@ public class Comment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     int comm_id;
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     @Column(name = "ans_id")

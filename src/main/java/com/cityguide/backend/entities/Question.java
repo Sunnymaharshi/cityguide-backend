@@ -17,6 +17,8 @@ public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     int ques_id;
+
+    @Column(columnDefinition = "TEXT")
     String description;
 
     String category;
