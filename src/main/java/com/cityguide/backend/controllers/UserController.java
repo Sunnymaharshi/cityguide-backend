@@ -211,8 +211,8 @@ public class UserController {
 
     //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
 
-    @RequestMapping(method = RequestMethod.POST, value = "/imageUpload")
-    public String uploadFile(@RequestParam("image") MultipartFile fileStream)
+    @RequestMapping(method = RequestMethod.POST, value = "/imageUpload/{city}")
+    public String uploadFile(@RequestParam("image") MultipartFile fileStream,@PathVariable("city") String city)
             throws IOException, ServletException {
 
         String bucketName = "may-cityguide";
@@ -220,12 +220,12 @@ public class UserController {
         String fileName = fileStream.getOriginalFilename() ;
 
         File file = multipartToFile( fileStream,fileName) ;
-        String k="rtt";
+        String folder=city;
 
         BlobInfo blobInfo =
                 storage.create(
                         BlobInfo
-                                .newBuilder(bucketName,k+"/"+fileName).setContentType("image/jpeg")
+                                .newBuilder(bucketName,folder+"/"+fileName)
                                 .build(),
                                 file.toURL().openStream()
                 );
@@ -270,19 +270,19 @@ public  static File multipartToFile(MultipartFile multipart, String fileName) th
 
 
 
-    @RequestMapping(value = "/geturl/{object-name}",method = RequestMethod.GET)
+    @RequestMapping(value = "/geturl/{city}/{object-name}",method = RequestMethod.GET)
     public static URL generateV4GetObjectSignedUrl(
-           @PathVariable("object-name") String objectName) throws StorageException {
+           @PathVariable("object-name") String objectName,@PathVariable("city") String city) throws StorageException {
          String projectId = "us-gcp-ame-con-116-npd-1";
          String bucketName = "may-cityguide";
 
         Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
 
         // Define resource
-        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, objectName)).build();
+        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, city+"/"+objectName)).build();
 
         URL url =
-                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+                storage.signUrl(blobInfo, 10080, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
         System.out.println("Generated GET signed URL:");
         System.out.println(url);

@@ -19,6 +19,7 @@ public class City {
 
     String city_tagline;
 
+
     String city_desc;
 
     String city_image;
