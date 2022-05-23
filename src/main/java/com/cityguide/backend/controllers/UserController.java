@@ -225,7 +225,7 @@ public class UserController {
         BlobInfo blobInfo =
                 storage.create(
                         BlobInfo
-                                .newBuilder(bucketName,k+"/"+fileName)
+                                .newBuilder(bucketName,k+"/"+fileName).setContentType("image/jpeg")
                                 .build(),
                                 file.toURL().openStream()
                 );
