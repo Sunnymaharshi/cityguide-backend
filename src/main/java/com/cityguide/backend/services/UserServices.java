@@ -141,8 +141,13 @@ public class UserServices {
     {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
-        return new ResponseEntity<>(user1.getQuestionList(),HttpStatus.OK);
+        List<Question> questionList=userRepository.findById(user).get().getQuestionList();
+        List<mQuestion> display=new ArrayList<>();
+        for (Question q:questionList)
+        {
+            display.add(new mQuestion(q.getQues_id(),q.getDescription(),q.getUsername(),q.getCity_name()));
+        }
+        return new ResponseEntity<>(display,HttpStatus.OK);
     }
 
 
@@ -241,6 +246,20 @@ public class UserServices {
          mAnswer display=new mAnswer(answer.getAns_id(),answer.getDescription(),answer.getFreq(),answer.getUpvotes(),answer.getDownvotes(),answer.getQues_id(),answer.getUsername());
          return new ResponseEntity<>(display,HttpStatus.OK);
      }
+    public ResponseEntity<?> getuserans(String requestTokenHeader)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        List<Answer> answerList=userRepository.findById(user).get().getAnswerList();
+        List<mAnswer> display=new ArrayList<>();
+
+        for(Answer a:answerList)
+        {
+            display.add(new mAnswer(a.getAns_id(),a.getDescription(),a.getFreq(),a.getUpvotes(),a.getDownvotes(),a.getQues_id(),a.getUsername()));
+        }
+
+        return new ResponseEntity<>(display,HttpStatus.OK);
+    }
      //<-------------------------------------------------------User Service for  comments----------------------------------------------->
     public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){//posting comments
         String jwtToken=requestTokenHeader.substring(7);

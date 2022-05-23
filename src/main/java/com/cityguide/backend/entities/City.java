@@ -19,6 +19,8 @@ public class City {
 
     String city_tagline;
 
+    String filename;
+
 
     String city_desc;
 

@@ -16,6 +16,7 @@ public class MetroMap {
     int metromap_id;
     String description;
     String metromap_img;
+    String filename;
 
     @Column(name = "city_name")
     String city_name;
