@@ -1,10 +1,14 @@
 package com.cityguide.backend.controllers;
 
-import com.cityguide.backend.entities.Attractions;
-import com.cityguide.backend.entities.City;
-import com.cityguide.backend.entities.Restaurant;
+import com.cityguide.backend.entities.*;
+import com.cityguide.backend.jwt.JwtTokenUtil;
+import com.cityguide.backend.repositories.BusMapRepository;
+import com.cityguide.backend.repositories.MetroMapRepository;
+import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.AdminService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +17,19 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+
+    @Autowired
+    MetroMapRepository metroMapRepository;
+
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    BusMapRepository busMapRepository;
     // <-------------------------------------------------------CUD For Cities---------------------------------------------------------->
 
     @RequestMapping(value = "/addcity",method = RequestMethod.POST) //add city
@@ -78,6 +95,39 @@ public class AdminController {
     @RequestMapping(value = "/deleterest/{resid}",method = RequestMethod.DELETE) // delete rest
     public ResponseEntity<?> deleterest(@RequestHeader("Authorization") String requestToken, @PathVariable("resid") int res_id) {
         return adminService.deleteRestaurant(requestToken, res_id);
+    }
+
+    //<----------------------------------------------------------Bus Map,MetroMap-------------------------------------------------------------------->
+    @RequestMapping(value = "/addmetro",method = RequestMethod.POST)
+    public ResponseEntity<?> addmetro(@RequestHeader("Authorization") String requestToken,@RequestBody MetroMap metroMap)
+    {
+        String token=requestToken.substring(7);
+        String username=jwtTokenUtil.getUsernameFromToken(token);
+        String role=userRepository.findById(username).get().getRole();
+        if(role.equalsIgnoreCase("Admin"))
+        {
+            return new ResponseEntity<>( metroMapRepository.save(metroMap), HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @RequestMapping(value = "/addbus",method = RequestMethod.POST)
+    public ResponseEntity<?> addbus(@RequestHeader("Authorization") String requestToken,@RequestBody BusMap busMap)
+    {
+        String token=requestToken.substring(7);
+        String username=jwtTokenUtil.getUsernameFromToken(token);
+        String role=userRepository.findById(username).get().getRole();
+        if(role.equalsIgnoreCase("Admin"))
+        {
+            return new ResponseEntity<>( busMapRepository.save(busMap), HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+        }
     }
 
 }

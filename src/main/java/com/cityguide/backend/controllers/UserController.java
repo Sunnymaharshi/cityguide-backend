@@ -2,11 +2,11 @@ package com.cityguide.backend.controllers;
 
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
-import com.cityguide.backend.repositories.QuestionRepository;
-import com.cityguide.backend.repositories.UserRepository;
+import com.cityguide.backend.repositories.*;
 import com.cityguide.backend.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +37,10 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+
+
+    @Autowired
+    CityRepository cityRepository;
 
 
 
@@ -111,8 +115,37 @@ public class UserController {
     }
 
 
-    //------------------------------------------------------------------Uplaod Image-------------------------------------------------------------------->
+    //----------------------------------------------------------MetroMap,BusMap--------------------------------------------------------------------------->
 
+
+
+    @RequestMapping(value = "/getmetro/{city}",method = RequestMethod.GET)
+    public ResponseEntity<?> getmetro(@PathVariable("city") String city)
+    {
+        try {
+
+            return new ResponseEntity<>(cityRepository.findById(city).get().getMetroMapList(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @RequestMapping(value = "/getbus/{city}",method = RequestMethod.GET)
+    public ResponseEntity<?> getbus(@PathVariable("city") String city)
+    {
+        try {
+
+            return new ResponseEntity<>(cityRepository.findById(city).get().getBusMapList(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        }
+
+    }
 
 }
 
