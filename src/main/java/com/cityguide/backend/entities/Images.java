@@ -10,19 +10,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Attractions {
+public class Images {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int attr_id;
-    String attr_name;
+    int image_id;
 
+    String type;
+
+    String type_id;
+
+    String filename;
 
     @Column(columnDefinition = "TEXT")
-    String description;
-
-    String attr_loc;
-
-
-    @Column(name = "city_name")
-    String city_name;
+    String img_url;
 }

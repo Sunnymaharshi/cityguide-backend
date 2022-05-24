@@ -17,8 +17,7 @@ public class Report
 {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int report_id;
-    int ques_id;
-    String ques_desc;
-    String reported_on;
-    String reported_by;
+    String report_type;
+    int report_type_id;
+    String report_desc;
 }

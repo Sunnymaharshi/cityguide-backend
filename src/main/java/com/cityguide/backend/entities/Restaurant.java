@@ -15,16 +15,12 @@ public class Restaurant {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int res_id;
     String res_name;
-    String filename;
 
 
     @Column(columnDefinition = "TEXT")
     String description;
 
     String res_location;
-
-    @Column(columnDefinition = "TEXT")
-    String res_image;
 
 
     @Column(name = "city_name")

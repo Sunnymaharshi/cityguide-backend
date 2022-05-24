@@ -13,8 +13,6 @@ public class mCity {
 
     String city_desc;
 
-    String city_image;
-
     String city_tagline;
 
 
