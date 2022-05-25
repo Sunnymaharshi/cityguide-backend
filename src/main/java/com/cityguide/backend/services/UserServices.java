@@ -269,7 +269,8 @@ public class UserServices {
             return new ResponseEntity<>(reportRepository.save(report), HttpStatus.OK);
         }
         catch (Exception e){
-           return new ResponseEntity<>(reportRepository.findReport(type,typeid),HttpStatus.OK);
+            Report k=reportRepository.findReport(type,typeid);
+           return new ResponseEntity<>(k,HttpStatus.OK);
         }
     }
 
