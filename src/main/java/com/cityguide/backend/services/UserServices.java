@@ -250,7 +250,7 @@ public class UserServices {
     {
         Report report=new Report();
         report.setReport_type(type);
-        report.setReport_id(typeid);
+        report.setReport_type_id(typeid);
         String desc="";
         if(type.equalsIgnoreCase("comment"))
         {
