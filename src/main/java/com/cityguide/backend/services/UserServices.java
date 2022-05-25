@@ -258,11 +258,11 @@ public class UserServices {
         }
         else if(type.equalsIgnoreCase("Answer"))
         {
-            desc=commentRepository.findById(typeid).get().getDescription();
+            desc=answerRepository.findById(typeid).get().getDescription();
         }
         else if(type.equalsIgnoreCase("Question"))
         {
-            desc=commentRepository.findById(typeid).get().getDescription();
+            desc=questionRepository.findById(typeid).get().getDescription();
         }
         report.setReport_desc(desc);
         try {
