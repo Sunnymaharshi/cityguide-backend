@@ -130,4 +130,11 @@ public class AdminController {
         }
     }
 
+    //------------------------------------------------------Get All Reports------------------------------------------------------------------------------>
+    @RequestMapping(value = "/getreports",method = RequestMethod.GET)
+    public ResponseEntity<?> getReports(@RequestHeader("Authorization") String requestToken)
+    {
+        return adminService.getreports(requestToken);
+    }
+
 }

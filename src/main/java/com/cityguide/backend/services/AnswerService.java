@@ -86,7 +86,7 @@ public class AnswerService {
         {
             return new ResponseEntity<>("Answer Not Found",HttpStatus.NOT_FOUND);
         }
-        if(user1.getUsername().equals(user2.getUsername())){
+        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
             try{
                 answerRepository.deleteById(ans_id);
                 return  new  ResponseEntity<>("Answer Deleted",HttpStatus.ACCEPTED);

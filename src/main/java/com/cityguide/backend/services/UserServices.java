@@ -42,6 +42,9 @@ public class UserServices {
     @Autowired
     DownvoteRepository downvoteRepository;
 
+    @Autowired
+    ReportRepository reportRepository;
+
 
     public ResponseEntity<String> signup(User user)
     {
@@ -242,7 +245,37 @@ public class UserServices {
         }
 
     }
+    //---------------------------------------------------------------Report a ques-------------------------------------------------------------------------->
+    public ResponseEntity<?> reportques(String type,int typeid)
+    {
+        Report report=new Report();
+        report.setReport_type(type);
+        report.setReport_id(typeid);
+        String desc="";
+        if(type.equalsIgnoreCase("comment"))
+        {
+            desc=commentRepository.findById(typeid).get().getDescription();
+        }
+        else if(type.equalsIgnoreCase("Answer"))
+        {
+            desc=commentRepository.findById(typeid).get().getDescription();
+        }
+        else if(type.equalsIgnoreCase("Question"))
+        {
+            desc=commentRepository.findById(typeid).get().getDescription();
+        }
+        report.setReport_desc(desc);
+        try {
+            return new ResponseEntity<>(reportRepository.save(report), HttpStatus.OK);
+        }
+        catch (Exception e){
+           return new ResponseEntity<>(reportRepository.findReport(type,typeid),HttpStatus.OK);
+        }
+    }
+
+
+    }
 
 
 
-}
+

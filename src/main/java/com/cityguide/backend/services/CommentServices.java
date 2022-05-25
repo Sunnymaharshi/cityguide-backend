@@ -72,7 +72,7 @@ public class CommentServices {
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
         Comment user2= commentRepository.findById(comm_id).get();
-        if(user1.getUsername().equals(user2.getUsername())){
+        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
             try{
                 commentRepository.deleteById(comm_id);
                 return  new  ResponseEntity<>("Comment Deleted",HttpStatus.ACCEPTED);

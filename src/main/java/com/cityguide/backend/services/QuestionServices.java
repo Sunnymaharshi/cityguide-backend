@@ -87,7 +87,7 @@ public class QuestionServices {
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         User user1=userRepository.findById(user).get();
         Question user2= questionRepository.findById(ques_id).get();
-        if(user1.getUsername().equals(user2.getUsername())){
+        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
             try{
                 questionRepository.deleteById(ques_id);
                 return  new  ResponseEntity<>("Question Deleted",HttpStatus.ACCEPTED);
