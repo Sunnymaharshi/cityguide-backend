@@ -48,6 +48,12 @@ public class UserServices {
     @Autowired
     BookMarkRepository bookMarkRepository;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
+
+    @Autowired
+    AttractionsRepository attractionsRepository;
+
 
     public ResponseEntity<String> signup(User user)
     {
@@ -145,6 +151,27 @@ public class UserServices {
             return new ResponseEntity<>("City Not Found",HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    public ResponseEntity<?> getrestbyid(int id)
+    {
+        try {
+            return new ResponseEntity<>(restaurantRepository.findById(id).get(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        }
+    }
+    public ResponseEntity<?> getattrbyid(int id)
+    {
+        try {
+            return new ResponseEntity<>(attractionsRepository.findById(id).get(), HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+        }
     }
 
     //<---------------------------------------------------Upvote,DownVote-------------------------------------------------------------->

@@ -85,6 +85,15 @@ public class UserController {
         return userServices.getmcity(city);
     }
 
+    @RequestMapping(value = "/getattrbyid/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getattrbyid(@PathVariable("id") int id) {
+        return userServices.getattrbyid(id);
+    }
+    @RequestMapping(value = "/getrestbyid/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getrestbyid(@PathVariable("id") int id) {
+        return userServices.getrestbyid(id);
+    }
+
     //<---------------------------------------------------------User Details------------------------------------------------------------------------------>
     //getting user details Api
     @RequestMapping(value = "/getuserdetails", method = RequestMethod.GET)
