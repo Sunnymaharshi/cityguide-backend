@@ -154,6 +154,19 @@ public class UserController {
       return userServices.reportques(type,typeid);
     }
 
+    //--------------------------------------------------------BookMarks------------------------------------------------------------------------------->
+    @RequestMapping(value = "/addbookmark/{type}/{typeid}",method = RequestMethod.POST)
+    public ResponseEntity<?> addbookmark(@RequestHeader("Authorization")String requesttokenheader,@PathVariable("type") String type,@PathVariable("typeid") int typeid)
+    {
+        return userServices.addbookmark(requesttokenheader,type,typeid);
+    }
+
+    @RequestMapping(value = "/getbookmarks",method = RequestMethod.GET)
+    public ResponseEntity<?> getbookmark(@RequestHeader("Authorization")String requesttokenheader)
+    {
+        return userServices.getuserbookmark(requesttokenheader);
+    }
+
 }
 
 

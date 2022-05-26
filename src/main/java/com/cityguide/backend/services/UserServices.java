@@ -45,6 +45,9 @@ public class UserServices {
     @Autowired
     ReportRepository reportRepository;
 
+    @Autowired
+    BookMarkRepository bookMarkRepository;
+
 
     public ResponseEntity<String> signup(User user)
     {
@@ -273,7 +276,31 @@ public class UserServices {
            return new ResponseEntity<>(k,HttpStatus.OK);
         }
     }
+    //-------------------------------------------------------------------BookMark---------------------------------------------------------------------------->
 
+    public ResponseEntity<?> addbookmark(String requestTokenHeader ,String type,int typeid)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        BookMarks bookMarks=new BookMarks();
+        bookMarks.setBook_type(type);
+        bookMarks.setBook_type_id(typeid);
+        bookMarks.setUsername(user);
+        try {
+            return new ResponseEntity<>(bookMarkRepository.save(bookMarks), HttpStatus.OK);
+        }
+        catch (Exception e){
+            BookMarks b=bookMarkRepository.findbookmark(type,typeid);
+            return new ResponseEntity<>(b,HttpStatus.OK);
+        }
+    }
+    public ResponseEntity<?> getuserbookmark(String requestTokenHeader)
+    {
+        String jwtToken=requestTokenHeader.substring(7);
+        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        User curr_user=userRepository.findById(user).get();
+        return new ResponseEntity<>(curr_user.getBookMarksList(),HttpStatus.OK);
+    }
 
     }
 
