@@ -1,6 +1,7 @@
 package com.cityguide.backend.services;
 
 import com.cityguide.backend.CustomResponses.mAnswer;
+import com.cityguide.backend.CustomResponses.mockforusernswers;
 import com.cityguide.backend.entities.Answer;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
@@ -137,11 +138,13 @@ public class AnswerService {
         String jwtToken=requestTokenHeader.substring(7);
         String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
         List<Answer> answerList=userRepository.findById(user).get().getAnswerList();
-        List<mAnswer> display=new ArrayList<>();
+        List<mockforusernswers> display=new ArrayList<>();
+
 
         for(Answer a:answerList)
         {
-            display.add(new mAnswer(a.getAns_id(),a.getDescription(),a.getFreq(),a.getUpvotes(),a.getDownvotes(),a.getQues_id(),a.getUsername()));
+            String desc=questionRepository.findById(a.getQues_id()).get().getDescription();
+            display.add(new mockforusernswers(a.getAns_id(),a.getDescription(),a.getFreq(),a.getUpvotes(),a.getDownvotes(),a.getQues_id(),desc,a.getUsername()));
         }
 
         return new ResponseEntity<>(display,HttpStatus.OK);

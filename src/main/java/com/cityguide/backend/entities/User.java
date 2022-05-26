@@ -31,4 +31,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "username",referencedColumnName = "username")
     List<Comment> commentList=new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name = "username",referencedColumnName = "username")
+    List<BookMarks> bookMarksList=new ArrayList<>();
 }
