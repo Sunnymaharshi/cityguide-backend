@@ -157,7 +157,7 @@ public class UserController {
     }
 
     //--------------------------------------------------------Report a ques------------------------------------------------------------------------->
-    @RequestMapping(value = "/reportques/{type}/{typeid}",method = RequestMethod.POST)
+    @RequestMapping(value = "/report/{type}/{typeid}",method = RequestMethod.POST)
     public ResponseEntity<?> reportques(@PathVariable("type") String type,@PathVariable("typeid") int typeid)
     {
       return userServices.reportques(type,typeid);

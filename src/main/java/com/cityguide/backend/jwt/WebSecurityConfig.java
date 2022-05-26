@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().configurationSource(corsConfigurationSource());
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/login","/signup","/getallcities","/getAllQues/{city}","/getcity/{city}","/getanswers/{quesid}","/getcmnts/{ansid}","/getrest/{city}","/getattr/{city}","/getcitynames","/getQues/{id}","/getrest","/getattr","/getanswer/{ansid}","/city/{city}","/getsimques/{city}/{query}","/imageUpload/{city}","/geturl/{city}/{object-name}","/getimagedetails/{type}/{type_id}","/getmetro/{city}","/getbus/{city}","/getattrbyid/{id}","/getrestbyid/{id}").permitAll().
+                .authorizeRequests().antMatchers("/login","/signup","/getallcities","/getAllQues/{city}","/getcity/{city}","/getanswers/{quesid}","/getcmnts/{ansid}","/getrest/{city}","/getattr/{city}","/getcitynames","/getQues/{id}","/getrest","/getattr","/getanswer/{ansid}","/city/{city}","/getsimques/{city}/{query}","/imageUpload/{city}","/geturl/{city}/{object-name}","/getimagedetails/{type}/{type_id}","/getmetro/{city}","/getbus/{city}","/getattrbyid/{id}","/getrestbyid/{id}","/report/{type}/{typeid}").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
