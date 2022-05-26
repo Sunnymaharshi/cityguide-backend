@@ -63,7 +63,9 @@ public class QuestionServices {
     public ResponseEntity<?> getQuestions(int id){
         try {
 
-            return new ResponseEntity<>(questionRepository.findById(id).get(), HttpStatus.OK);
+            Question q=questionRepository.findById(id).get();
+            mQuestion display=new mQuestion(q.getQues_id(),q.getDescription(),q.getUsername(),q.getCity_name());
+            return new ResponseEntity<>(display, HttpStatus.OK);
         }
         catch (Exception e)
         {
