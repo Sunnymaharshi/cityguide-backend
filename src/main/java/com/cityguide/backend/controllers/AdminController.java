@@ -130,11 +130,18 @@ public class AdminController {
         }
     }
 
-    //------------------------------------------------------Get All Reports------------------------------------------------------------------------------>
+    //------------------------------------------------------Reports------------------------------------------------------------------------------>
     @RequestMapping(value = "/getreports",method = RequestMethod.GET)
     public ResponseEntity<?> getReports(@RequestHeader("Authorization") String requestToken)
     {
         return adminService.getreports(requestToken);
     }
+    @RequestMapping(value = "/deletereport/{reportid}",method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteReports(@RequestHeader("Authorization") String requestToken,@PathVariable("reportid") int id)
+    {
+        return adminService.deletereport(requestToken,id);
+    }
+
+
 
 }

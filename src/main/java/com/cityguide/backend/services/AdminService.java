@@ -198,6 +198,19 @@ public class AdminService {
         }
 
     }
+
+    public ResponseEntity<?> deletereport(String requestTokenHeader,int reportid) {
+        String token = requestTokenHeader.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String role = userRepository.findById(username).get().getRole();
+        if (role.equalsIgnoreCase("Admin")) {
+            reportRepository.deleteById(reportid);
+            return new ResponseEntity<>("Report Deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
+        }
+
+    }
 }
 
 
