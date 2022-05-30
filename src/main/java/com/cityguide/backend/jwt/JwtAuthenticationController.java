@@ -49,7 +49,8 @@ public class JwtAuthenticationController {
             return new ResponseEntity<>("Username does not exist!", HttpStatus.OK);
         } else if (check.isPresent()) {
             User user = userRepository.findById(loginobject.getUsername()).get();
-            if (user.getPassword().equals(bcryptEncoder.encode(loginobject.getPassword()))) {
+            String password=loginobject.getPassword();
+            if (user.getPassword().equals(bcryptEncoder.encode(password))) {
                 authenticate(loginobject.getUsername(), loginobject.getPassword());
 
                 final UserDetails userDetails = userDetailsService
