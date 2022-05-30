@@ -11,7 +11,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.*;
 
@@ -54,6 +56,9 @@ public class UserServices {
     @Autowired
     AttractionsRepository attractionsRepository;
 
+    @Autowired
+    PasswordEncoder bcryptEncoder;
+
 
     public ResponseEntity<String> signup(User user)
     {
@@ -62,6 +67,9 @@ public class UserServices {
         {
             return new ResponseEntity<>("User with username already Exists", HttpStatus.FORBIDDEN);
         }
+        String pass= user.getPassword();
+        String code=bcryptEncoder.encode(pass);
+        user.setPassword(code);
          userRepository.save(user);
          return new ResponseEntity<>("User Signed In Successfully",HttpStatus.ACCEPTED);
     }
