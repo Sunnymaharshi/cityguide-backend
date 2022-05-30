@@ -67,9 +67,9 @@ public class UserServices {
         {
             return new ResponseEntity<>("User with username already Exists", HttpStatus.FORBIDDEN);
         }
-        String pass= user.getPassword();
-        String code=bcryptEncoder.encode(pass);
-        user.setPassword(code);
+//        String pass= user.getPassword();
+//        String code=bcryptEncoder.encode(pass);
+//        user.setPassword(code);
          userRepository.save(user);
          return new ResponseEntity<>("User Signed In Successfully",HttpStatus.ACCEPTED);
     }
