@@ -15,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,9 @@ public class JwtAuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder bcryptEncoder;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Loginobject loginobject) throws Exception {
         Optional<User> check = userRepository.findById(loginobject.getUsername());
@@ -45,7 +49,7 @@ public class JwtAuthenticationController {
             return new ResponseEntity<>("Username does not exist!", HttpStatus.OK);
         } else if (check.isPresent()) {
             User user = userRepository.findById(loginobject.getUsername()).get();
-            if (user.getPassword().equals(loginobject.getPassword())) {
+            if (user.getPassword().equals(bcryptEncoder.encode(loginobject.getPassword()))) {
                 authenticate(loginobject.getUsername(), loginobject.getPassword());
 
                 final UserDetails userDetails = userDetailsService
