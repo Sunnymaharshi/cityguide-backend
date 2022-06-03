@@ -147,7 +147,7 @@ public class UserController {
     {
         try {
 
-            return new ResponseEntity<>(cityRepository.findById(city).get().getBusMapList(), HttpStatus.OK);
+            return new ResponseEntity<>(cityRepository.findById(city).get().getBusList(), HttpStatus.OK);
         }
         catch (Exception e)
         {
@@ -175,6 +175,9 @@ public class UserController {
     {
         return userServices.getuserbookmark(requesttokenheader);
     }
+
+
+
 
 }
 

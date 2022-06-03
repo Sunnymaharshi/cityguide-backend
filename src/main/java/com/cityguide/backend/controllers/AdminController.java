@@ -3,6 +3,7 @@ package com.cityguide.backend.controllers;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.BusMapRepository;
+import com.cityguide.backend.repositories.BusRepository;
 import com.cityguide.backend.repositories.MetroMapRepository;
 import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.AdminService;
@@ -115,20 +116,28 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addbus",method = RequestMethod.POST)
-    public ResponseEntity<?> addbus(@RequestHeader("Authorization") String requestToken,@RequestBody BusMap busMap)
+    public ResponseEntity<?> addbus(@RequestHeader("Authorization") String requestToken,@RequestBody Bus bus)
     {
-        String token=requestToken.substring(7);
-        String username=jwtTokenUtil.getUsernameFromToken(token);
-        String role=userRepository.findById(username).get().getRole();
-        if(role.equalsIgnoreCase("Admin"))
-        {
-            return new ResponseEntity<>( busMapRepository.save(busMap), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>( adminService.addBus(requestToken, bus), HttpStatus.OK);
         }
-        else
+       catch(Exception e)
         {
             return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
         }
     }
+    @RequestMapping(value = "/removebus/{bus_id}",method = RequestMethod.DELETE)
+    public ResponseEntity<?> removebus(@RequestHeader("Authorization") String requestToken,@PathVariable("bus_id")  int bus_id)
+    {
+        try{
+            return new ResponseEntity<>( adminService.removeBus(requestToken,bus_id), HttpStatus.OK);
+        }
+        catch(Exception e)
+        {
+            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+        }
+    }
+
 
     //------------------------------------------------------Reports------------------------------------------------------------------------------>
     @RequestMapping(value = "/getreports",method = RequestMethod.GET)

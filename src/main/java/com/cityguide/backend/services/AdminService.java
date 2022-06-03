@@ -33,6 +33,9 @@ public class AdminService {
     @Autowired
     ReportRepository reportRepository;
 
+    @Autowired
+    BusRepository busRepository;
+
 
     //<------------------------------------------------------------------CRUD for Cities--------------------------------------------------------------------------->
 
@@ -212,6 +215,30 @@ public class AdminService {
         }
 
     }
+    public ResponseEntity<?> addBus(String requestTokenHeader, Bus bus){
+        String token = requestTokenHeader.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String role = userRepository.findById(username).get().getRole();
+        if (role.equalsIgnoreCase("Admin")) {
+            busRepository.save(bus);
+            return new ResponseEntity<>("Bus Added", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
+        }
+    }
+
+    public ResponseEntity<?> removeBus(String requestTokenHeader, Integer bus_id){
+        String token = requestTokenHeader.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String role = userRepository.findById(username).get().getRole();
+        if (role.equalsIgnoreCase("Admin")) {
+            busRepository.deleteById(bus_id);
+            return new ResponseEntity<>("Bus Removed", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
+        }
+    }
+
 }
 
 
