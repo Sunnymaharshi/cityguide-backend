@@ -1,4 +1,4 @@
-package com.cityguide.backend.entities;
+package com.cityguide.backend.types;
 
 public class Role {
 

@@ -1,7 +1,7 @@
 package com.cityguide.backend.services;
 
-import com.cityguide.backend.CustomResponses.mAnswer;
-import com.cityguide.backend.CustomResponses.mockforusernswers;
+import com.cityguide.backend.response.mAnswer;
+import com.cityguide.backend.response.mockforusernswers;
 import com.cityguide.backend.entities.Answer;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;

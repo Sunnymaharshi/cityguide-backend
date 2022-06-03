@@ -1,6 +1,6 @@
 package com.cityguide.backend.services;
 
-import com.cityguide.backend.CustomResponses.mQuestion;
+import com.cityguide.backend.response.mQuestion;
 import com.cityguide.backend.entities.Question;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;

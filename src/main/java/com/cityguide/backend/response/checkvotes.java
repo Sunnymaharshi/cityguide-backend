@@ -1,4 +1,4 @@
-package com.cityguide.backend.CustomResponses;
+package com.cityguide.backend.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

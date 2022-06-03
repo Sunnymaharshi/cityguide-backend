@@ -1,12 +1,11 @@
 package com.cityguide.backend.services;
 
-import com.cityguide.backend.CustomResponses.checkvotes;
-import com.cityguide.backend.CustomResponses.mAnswer;
-import com.cityguide.backend.CustomResponses.mCity;
-import com.cityguide.backend.CustomResponses.mQuestion;
+import com.cityguide.backend.response.checkvotes;
+import com.cityguide.backend.response.mCity;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import com.cityguide.backend.response.Authobject;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

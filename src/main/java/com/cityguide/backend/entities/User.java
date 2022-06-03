@@ -1,5 +1,6 @@
 package com.cityguide.backend.entities;
 
+import com.cityguide.backend.types.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class User {
     @Id
     String username;
     String password;
-    String role=Role.USER;
+    String role= Role.USER;
     String emailid;
     String mob_no;
     String name;

@@ -1,10 +1,9 @@
 package com.cityguide.backend.jwt;
 
-import java.util.Objects;
 import java.util.Optional;
 
 
-import com.cityguide.backend.entities.Loginobject;
+import com.cityguide.backend.request.Loginobject;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

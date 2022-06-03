@@ -3,14 +3,11 @@ package com.cityguide.backend.services;
 import com.cityguide.backend.entities.*;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import com.cityguide.backend.types.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService {
