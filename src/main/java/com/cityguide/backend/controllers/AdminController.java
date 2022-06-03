@@ -111,7 +111,7 @@ public class AdminController {
         }
         else
         {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("${err_msg_unauthorized}",HttpStatus.FORBIDDEN);
         }
     }
 
@@ -123,7 +123,7 @@ public class AdminController {
         }
        catch(Exception e)
         {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("${err_msg_unauthorized}",HttpStatus.FORBIDDEN);
         }
     }
     @RequestMapping(value = "/removebus/{bus_id}",method = RequestMethod.DELETE)
@@ -134,7 +134,7 @@ public class AdminController {
         }
         catch(Exception e)
         {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("${err_msg_unauthorized}",HttpStatus.FORBIDDEN);
         }
     }
 
