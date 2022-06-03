@@ -1,6 +1,7 @@
 package com.cityguide.backend.services;
 
 import com.cityguide.backend.entities.*;
+import com.cityguide.backend.exceptions.UnAuthorisedException;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
 import com.cityguide.backend.types.Role;
@@ -33,6 +34,8 @@ public class AdminService {
     @Autowired
     BusRepository busRepository;
 
+    @Autowired
+    MetroMapRepository metroMapRepository;
 
     //<------------------------------------------------------------------CRUD for Cities--------------------------------------------------------------------------->
 
@@ -212,6 +215,30 @@ public class AdminService {
         }
 
     }
+
+    public ResponseEntity<?> addMetro(String requestTokenHeader,MetroMap metroMap){
+        String token = requestTokenHeader.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String role = userRepository.findById(username).get().getRole();
+        if (role.equalsIgnoreCase("Admin")) {
+
+            return new ResponseEntity<>( metroMapRepository.save(metroMap), HttpStatus.OK);
+        } else {
+            throw new UnAuthorisedException();
+        }
+    }
+    public ResponseEntity<?> getAllBuses(String requestTokenHeader){
+        String token = requestTokenHeader.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        String role = userRepository.findById(username).get().getRole();
+        if (role.equalsIgnoreCase("Admin")) {
+
+            return new ResponseEntity<>( busRepository.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity<?> addBus(String requestTokenHeader, Bus bus){
         String token = requestTokenHeader.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(token);
@@ -234,6 +261,11 @@ public class AdminService {
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
         }
+    }
+
+    public Boolean isAdmin(String username){
+        String role=userRepository.findById(username).get().getRole();
+        return role.equalsIgnoreCase(Role.ADMIN);
     }
 
 }

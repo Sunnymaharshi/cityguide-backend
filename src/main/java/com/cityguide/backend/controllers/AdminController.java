@@ -29,8 +29,7 @@ public class AdminController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    BusMapRepository busMapRepository;
+
     // <-------------------------------------------------------CUD For Cities---------------------------------------------------------->
 
     @RequestMapping(value = "/addcity",method = RequestMethod.POST) //add city
@@ -102,40 +101,25 @@ public class AdminController {
     @RequestMapping(value = "/addmetro",method = RequestMethod.POST)
     public ResponseEntity<?> addmetro(@RequestHeader("Authorization") String requestToken,@RequestBody MetroMap metroMap)
     {
-        String token=requestToken.substring(7);
-        String username=jwtTokenUtil.getUsernameFromToken(token);
-        String role=userRepository.findById(username).get().getRole();
-        if(role.equalsIgnoreCase("Admin"))
-        {
-            return new ResponseEntity<>( metroMapRepository.save(metroMap), HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
-        }
+            return adminService.addMetro(requestToken,metroMap);
+    }
+    //<----------------------------------------------------------Bus Data-------------------------------------------------------------------->
+    @RequestMapping(value = "/getbuses",method = RequestMethod.GET)
+    public ResponseEntity<?> getAllBuses(@RequestHeader("Authorization") String requestToken)
+    {
+        return  adminService.getAllBuses(requestToken);
     }
 
     @RequestMapping(value = "/addbus",method = RequestMethod.POST)
     public ResponseEntity<?> addbus(@RequestHeader("Authorization") String requestToken,@RequestBody Bus bus)
     {
-        try{
-            return new ResponseEntity<>( adminService.addBus(requestToken, bus), HttpStatus.OK);
-        }
-       catch(Exception e)
-        {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
-        }
+        return  adminService.addBus(requestToken, bus);
     }
+
     @RequestMapping(value = "/removebus/{bus_id}",method = RequestMethod.DELETE)
     public ResponseEntity<?> removebus(@RequestHeader("Authorization") String requestToken,@PathVariable("bus_id")  int bus_id)
     {
-        try{
-            return new ResponseEntity<>( adminService.removeBus(requestToken,bus_id), HttpStatus.OK);
-        }
-        catch(Exception e)
-        {
-            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
-        }
+        return adminService.removeBus(requestToken,bus_id);
     }
 
 
