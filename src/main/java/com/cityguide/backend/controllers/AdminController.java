@@ -101,6 +101,7 @@ public class AdminController {
     @RequestMapping(value = "/addmetro",method = RequestMethod.POST)
     public ResponseEntity<?> addmetro(@RequestHeader("Authorization") String requestToken,@RequestBody MetroMap metroMap)
     {
+
             return adminService.addMetro(requestToken,metroMap);
     }
     //<----------------------------------------------------------Bus Data-------------------------------------------------------------------->
@@ -113,13 +114,16 @@ public class AdminController {
     @RequestMapping(value = "/addbus",method = RequestMethod.POST)
     public ResponseEntity<?> addbus(@RequestHeader("Authorization") String requestToken,@RequestBody Bus bus)
     {
+
         return  adminService.addBus(requestToken, bus);
     }
 
     @RequestMapping(value = "/removebus/{bus_id}",method = RequestMethod.DELETE)
     public ResponseEntity<?> removebus(@RequestHeader("Authorization") String requestToken,@PathVariable("bus_id")  int bus_id)
     {
+
         return adminService.removeBus(requestToken,bus_id);
+
     }
 
 
