@@ -5,6 +5,7 @@ import com.cityguide.backend.entities.Question;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import com.cityguide.backend.types.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,20 +77,16 @@ public class QuestionServices {
     //posting question
     public ResponseEntity<Question> postques(String requestTokenHeader, Question question)
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
-        question.setUsername(user);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        question.setUsername(username);
         return  new ResponseEntity<>(questionRepository.save(question),HttpStatus.ACCEPTED);
     }
 
     //deleting question
     public ResponseEntity<?> delques(String requestTokenHeader, int ques_id){
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         Question user2= questionRepository.findById(ques_id).get();
-        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
+        if(username.equals(user2.getUsername())||isAdmin(username)){
             try{
                 questionRepository.deleteById(ques_id);
                 return  new  ResponseEntity<>("Question Deleted",HttpStatus.ACCEPTED);
@@ -105,9 +102,8 @@ public class QuestionServices {
 
     public ResponseEntity<?> getuserques(String requestTokenHeader)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        List<Question> questionList=userRepository.findById(user).get().getQuestionList();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        List<Question> questionList=userRepository.findById(username).get().getQuestionList();
         List<mQuestion> display=new ArrayList<>();
         for (Question q:questionList)
         {
@@ -139,6 +135,9 @@ public class QuestionServices {
         }
         return new ResponseEntity<>(displaylist,HttpStatus.OK);
     }
-
+    public Boolean isAdmin(String username){
+        String role=userRepository.findById(username).get().getRole();
+        return role.equalsIgnoreCase(Role.ADMIN);
+    }
 
 }

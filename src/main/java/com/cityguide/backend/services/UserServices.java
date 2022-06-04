@@ -74,16 +74,14 @@ public class UserServices {
     }
     public ResponseEntity<?> getuserdetails(String requestTokenHeader)
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        return new ResponseEntity<>(userRepository.findById(user).get(),HttpStatus.OK);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        return new ResponseEntity<>(userRepository.findById(username).get(),HttpStatus.OK);
     }
     public ResponseEntity<?> getusername(String requestTokenHeader)
     {
        try {
-            String jwtToken = requestTokenHeader.substring(7);
-            String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            User curruser=userRepository.findById(user).get();
+            String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+            User curruser=userRepository.findById(username).get();
             Authobject authobject=new Authobject(curruser.getUsername(), curruser.getRole());
             return new ResponseEntity<>(authobject,HttpStatus.OK);
         }
@@ -184,19 +182,18 @@ public class UserServices {
     //<---------------------------------------------------Upvote,DownVote-------------------------------------------------------------->
     public ResponseEntity<?> upvote(String requestTokenHeader,int ansid)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         try {
             Upvote upvote = new Upvote();
             upvote.setAns_id(ansid);
-            upvote.setUsername(user);
-            Optional<Downvote> check = downvoteRepository.findUserDownvote(user, ansid);
+            upvote.setUsername(username);
+            Optional<Downvote> check = downvoteRepository.findUserDownvote(username, ansid);
             if (check.isPresent()) {
                 Answer answer = answerRepository.findById(ansid).get();
                 answer.setDownvotes(answer.getDownvotes() - 1);
                 answer.setUpvotes(answer.getUpvotes()+1);
                 answerRepository.save(answer);
-                Downvote d=downvoteRepository.findDownvote(user,ansid);
+                Downvote d=downvoteRepository.findDownvote(username,ansid);
                 downvoteRepository.delete(d);
                 upvoteRepository.save(upvote);
                 return new ResponseEntity<>("Upvoted!!", HttpStatus.OK);
@@ -206,7 +203,7 @@ public class UserServices {
         }
         catch (Exception e)
         {
-            Upvote u=upvoteRepository.findUpvote(user,ansid);
+            Upvote u=upvoteRepository.findUpvote(username,ansid);
             upvoteRepository.delete(u);
             Answer answer=answerRepository.findById(ansid).get();
             answer.setUpvotes(answer.getUpvotes()-1);
@@ -223,19 +220,18 @@ public class UserServices {
 
     public ResponseEntity<?> downvote(String requestTokenHeader,int ansid)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         try {
             Downvote downvote = new Downvote();
             downvote.setAns_id(ansid);
-            downvote.setUsername(user);
-            Optional<Upvote> check = upvoteRepository.findUserUpvote(user, ansid);
+            downvote.setUsername(username);
+            Optional<Upvote> check = upvoteRepository.findUserUpvote(username, ansid);
             if (check.isPresent()) {
                 Answer answer = answerRepository.findById(ansid).get();
                 answer.setUpvotes(answer.getUpvotes() - 1);
                 answer.setDownvotes(answer.getDownvotes()+1);
                 answerRepository.save(answer);
-                Upvote v=upvoteRepository.findUpvote(user,ansid);
+                Upvote v=upvoteRepository.findUpvote(username,ansid);
                 upvoteRepository.delete(v);
                 downvoteRepository.save(downvote);
                 return new ResponseEntity<>("Downvoted!!", HttpStatus.OK);
@@ -245,7 +241,7 @@ public class UserServices {
         }
         catch (Exception e)
         {
-            Downvote d=downvoteRepository.findDownvote(user,ansid);
+            Downvote d=downvoteRepository.findDownvote(username,ansid);
             downvoteRepository.delete(d);
             Answer answer=answerRepository.findById(ansid).get();
             answer.setDownvotes(answer.getDownvotes()-1);
@@ -261,11 +257,10 @@ public class UserServices {
 
     public ResponseEntity<?> check(String requestTokenHeader,int ansid)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         checkvotes c=new checkvotes();
-        Optional<Upvote> h=upvoteRepository.findUserUpvote(user,ansid);
-        Optional<Downvote> d=downvoteRepository.findUserDownvote(user,ansid);
+        Optional<Upvote> h=upvoteRepository.findUserUpvote(username,ansid);
+        Optional<Downvote> d=downvoteRepository.findUserDownvote(username,ansid);
         if(h.isPresent())
         {
             c.setHasupvoted(true);
@@ -314,12 +309,11 @@ public class UserServices {
 
     public ResponseEntity<?> addbookmark(String requestTokenHeader ,String type,int typeid)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         BookMarks bookMarks=new BookMarks();
         bookMarks.setBook_type(type);
         bookMarks.setBook_type_id(typeid);
-        bookMarks.setUsername(user);
+        bookMarks.setUsername(username);
         try {
             return new ResponseEntity<>(bookMarkRepository.save(bookMarks), HttpStatus.OK);
         }
@@ -330,9 +324,8 @@ public class UserServices {
     }
     public ResponseEntity<?> getuserbookmark(String requestTokenHeader)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User curr_user=userRepository.findById(user).get();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        User curr_user=userRepository.findById(username).get();
         return new ResponseEntity<>(curr_user.getBookMarksList(),HttpStatus.OK);
     }
 
