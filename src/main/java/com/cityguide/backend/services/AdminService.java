@@ -41,12 +41,8 @@ public class AdminService {
 
     public ResponseEntity<?> addcity(String requestTokenHeader, City city)//add city
     {
-//        String jwtToken = requestTokenHeader.substring(7);
-//        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        String user=jwtTokenUtil.getUserFromToken(requestTokenHeader);
-        User user1 = userRepository.findById(user).get();
-        System.out.println(user1.getRole() + Role.ADMIN);
-        if (isAdmin(user1.getUsername())) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)){
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -55,11 +51,8 @@ public class AdminService {
 
     public ResponseEntity<?> updatecity(String requestTokenHeader, City city)//update city
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)){
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -68,10 +61,8 @@ public class AdminService {
 
     public ResponseEntity<?> deletecity(String requestTokenHeader, String city)//delete city
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)){
             try {
                 cityRepository.deleteById(city);
                 return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
@@ -89,10 +80,8 @@ public class AdminService {
 
     public ResponseEntity<?> addattr(String requestTokenHeader, Attractions attraction)//add attraction
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -101,10 +90,8 @@ public class AdminService {
 
     public ResponseEntity<?> updateattr(String requestTokenHeader, Attractions attraction)//update attraction
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             return new ResponseEntity<>(attractionsRepository.save(attraction), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -113,10 +100,8 @@ public class AdminService {
 
     public ResponseEntity<?> deleteattr(String requestTokenHeader, int attrid)//delete attractions
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             try {
                 attractionsRepository.deleteById(attrid);
                 return new ResponseEntity<>("Deleted!", HttpStatus.ACCEPTED);
@@ -138,10 +123,8 @@ public class AdminService {
     //<--------------------------------------------------------CRUD for Restaurants----------------------------------------------------------->
     //Adding Restaurant
     public ResponseEntity<?> addRestaurant(String requestTokenHeader, Restaurant restaurant) {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             return new ResponseEntity<>(restaurantRepository.save(restaurant), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
@@ -151,10 +134,8 @@ public class AdminService {
     //updating Restaurant
     public ResponseEntity<?> updateRestaurant(String requestTokenHeader, Restaurant restaurant)//update restaurant
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             return new ResponseEntity<>(restaurantRepository.save(restaurant), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
@@ -165,10 +146,8 @@ public class AdminService {
     public ResponseEntity<?> deleteRestaurant(String requestTokenHeader, int res_id)//delete restaurant
 
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1 = userRepository.findById(user).get();
-        if (user1.getRole().equals(Role.ADMIN)) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
 
 
             try {
@@ -192,10 +171,8 @@ public class AdminService {
 
     //---------------------------------------------------------------report-------------------------------------------------------------------->
     public ResponseEntity<?> getreports(String requestTokenHeader) {
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             return new ResponseEntity<>(reportRepository.findAll(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.OK);
@@ -205,10 +182,8 @@ public class AdminService {
     }
 
     public ResponseEntity<?> deletereport(String requestTokenHeader,int reportid) {
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             reportRepository.deleteById(reportid);
             return new ResponseEntity<>("Report Deleted", HttpStatus.OK);
         } else {
@@ -218,10 +193,8 @@ public class AdminService {
     }
 
     public ResponseEntity<?> addMetro(String requestTokenHeader,MetroMap metroMap){
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
 
             return new ResponseEntity<>( metroMapRepository.save(metroMap), HttpStatus.OK);
         } else {
@@ -229,10 +202,8 @@ public class AdminService {
         }
     }
     public ResponseEntity<?> getAllBuses(String requestTokenHeader){
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
 
             return new ResponseEntity<>( busRepository.findAll(), HttpStatus.OK);
         } else {
@@ -241,10 +212,8 @@ public class AdminService {
     }
 
     public ResponseEntity<?> addBus(String requestTokenHeader, Bus bus){
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             busRepository.save(bus);
             return new ResponseEntity<>("Bus Added", HttpStatus.OK);
         } else {
@@ -253,10 +222,8 @@ public class AdminService {
     }
 
     public ResponseEntity<?> removeBus(String requestTokenHeader, Integer bus_id){
-        String token = requestTokenHeader.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        String role = userRepository.findById(username).get().getRole();
-        if (role.equalsIgnoreCase("Admin")) {
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        if (isAdmin(username)) {
             busRepository.deleteById(bus_id);
             return new ResponseEntity<>("Bus Removed", HttpStatus.OK);
         } else {
