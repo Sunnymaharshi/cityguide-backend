@@ -61,12 +61,10 @@ public class JwtAuthenticationController {
 
 
                 return ResponseEntity.ok(new JwtResponse(token));
-            }
-            else {
+            } else {
                 return new ResponseEntity<>("Wrong Password!", HttpStatus.OK);
             }
-        }
-        else return new ResponseEntity<>("Something Went Wrong",HttpStatus.METHOD_FAILURE);
+        } else return new ResponseEntity<>("Something Went Wrong", HttpStatus.METHOD_FAILURE);
     }
 
     private void authenticate(String username, String password) throws Exception {

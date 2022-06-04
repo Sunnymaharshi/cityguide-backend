@@ -15,21 +15,23 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
 import com.google.protobuf.Message;
 
 import static com.google.cloud.storage.Acl.User.ofAllUsers;
+
 @RestController
 public class ImageController {
 
-        @Autowired
-        Storage storage;
+    @Autowired
+    Storage storage;
 
-        @Autowired
-       ImageRepository imageRepository;
+    @Autowired
+    ImageRepository imageRepository;
 
-//Upload Image To GCP repository
+    //Upload Image To GCP repository
     @RequestMapping(method = RequestMethod.POST, value = "/imageUpload/{city}")
     public String uploadFile(@RequestParam("image") MultipartFile fileStream, @PathVariable("city") String city)
             throws IOException, ServletException {
@@ -48,26 +50,11 @@ public class ImageController {
                                 .build(),
                         file.toURL().openStream()
                 );
-//        BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, fileName)).build();
 
-
-//        URL url =
-//                storage.signUrl(blobInfo, 15, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
-
-
-        System.out.println(blobInfo.getMediaLink());
         return blobInfo.getMediaLink();
     }
 
 
-    //    private File convertMultiPartToFile(MultipartFile file ) throws IOException
-//    {
-//        File convFile = new File( file.getOriginalFilename());
-//        FileOutputStream fos = new FileOutputStream( convFile );
-//        fos.write( file.getBytes() );
-//        fos.close();
-//        return convFile;
-//    }
     public static File multipartToFile(MultipartFile multipart, String fileName) throws IllegalStateException, IOException {
         File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + fileName);
         multipart.transferTo(convFile);
@@ -87,7 +74,7 @@ public class ImageController {
         }
     }
 
-//Get Signed Url
+    //Get Signed Url
     @RequestMapping(value = "/geturl/{city}/{object-name}", method = RequestMethod.GET)
     public static URL generateV4GetObjectSignedUrl(
             @PathVariable("object-name") String objectName, @PathVariable("city") String city) throws StorageException {
@@ -101,30 +88,21 @@ public class ImageController {
 
         URL url =
                 storage.signUrl(blobInfo, 10080, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
-
-        System.out.println("Generated GET signed URL:");
-        System.out.println(url);
-        System.out.println("You can use this URL with any user agent, for example:");
-        System.out.println("curl '" + url + "'");
         return url;
     }
 
-    @RequestMapping(value = "/addimagedetails",method = RequestMethod.POST)
-    public ResponseEntity<?> addimagedetails(@RequestBody Images images)
-    {
-       return new ResponseEntity<>( imageRepository.save(images), HttpStatus.OK);
+    @RequestMapping(value = "/addimagedetails", method = RequestMethod.POST)
+    public ResponseEntity<?> addimagedetails(@RequestBody Images images) {
+        return new ResponseEntity<>(imageRepository.save(images), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getimagedetails/{type}/{type_id}",method = RequestMethod.GET)
-    public ResponseEntity<?> addimagedetails(@PathVariable("type") String type,@PathVariable("type_id") String type_id)
-    {
+    @RequestMapping(value = "/getimagedetails/{type}/{type_id}", method = RequestMethod.GET)
+    public ResponseEntity<?> addimagedetails(@PathVariable("type") String type, @PathVariable("type_id") String type_id) {
         List<Images> imagesList;
         try {
-            imagesList= imageRepository.findimages(type,type_id);
-        }
-        catch (Exception e)
-        {
-            return new ResponseEntity<>("No images found of the following type",HttpStatus.NOT_FOUND);
+            imagesList = imageRepository.findimages(type, type_id);
+        } catch (Exception e) {
+            return new ResponseEntity<>("No images found of the following type", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(imagesList, HttpStatus.OK);
     }

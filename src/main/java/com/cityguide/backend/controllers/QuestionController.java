@@ -15,8 +15,6 @@ public class QuestionController {
     QuestionServices questionServices;
 
 
-
-
     @RequestMapping(value = "/postques", method = RequestMethod.POST)
     public ResponseEntity<Question> postques(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Question question) {
 

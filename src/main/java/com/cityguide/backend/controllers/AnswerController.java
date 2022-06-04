@@ -16,7 +16,6 @@ public class AnswerController {
 
     @RequestMapping(value = "/postans", method = RequestMethod.POST)
     public ResponseEntity<Answer> postans(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody Answer answer) {
-
         return answerService.postans(requestTokenHeader, answer);
     }
 

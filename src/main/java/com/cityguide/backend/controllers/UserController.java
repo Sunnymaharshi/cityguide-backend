@@ -1,6 +1,7 @@
 package com.cityguide.backend.controllers;
 
 import com.cityguide.backend.entities.*;
+import com.cityguide.backend.exceptions.NotFoundException;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
 import com.cityguide.backend.services.UserServices;
@@ -137,7 +138,8 @@ public class UserController {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("City Metro");
+
         }
 
     }
@@ -151,7 +153,7 @@ public class UserController {
         }
         catch (Exception e)
         {
-            return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("City Buses");
         }
 
     }
@@ -175,9 +177,6 @@ public class UserController {
     {
         return userServices.getuserbookmark(requesttokenheader);
     }
-
-
-
 
 }
 
