@@ -1,6 +1,7 @@
 package com.cityguide.backend.controllers;
 
 import com.cityguide.backend.entities.Images;
+import com.cityguide.backend.exceptions.NotFoundException;
 import com.cityguide.backend.repositories.ImageRepository;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ public class ImageController {
         try {
             imagesList = imageRepository.findimages(type, type_id);
         } catch (Exception e) {
-            return new ResponseEntity<>("No images found of the following type", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Images");
         }
         return new ResponseEntity<>(imagesList, HttpStatus.OK);
     }
