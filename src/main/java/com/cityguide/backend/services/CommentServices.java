@@ -4,6 +4,7 @@ import com.cityguide.backend.entities.Comment;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import com.cityguide.backend.types.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +43,8 @@ public class CommentServices {
 
     //post comments
     public ResponseEntity<Comment> postcmnt(String requestTokenHeader, Comment comment){//posting comments
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        comment.setUsername(user);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        comment.setUsername(username);
         return new ResponseEntity<>(commentRepository.save(comment), HttpStatus.ACCEPTED);
     }
 
@@ -68,11 +68,9 @@ public class CommentServices {
 
     //deleting comments
     public ResponseEntity<?> delcomm(String requestTokenHeader, int comm_id){
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         Comment user2= commentRepository.findById(comm_id).get();
-        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
+        if(username.equals(user2.getUsername())||isAdmin(username)){
             try{
                 commentRepository.deleteById(comm_id);
                 return  new  ResponseEntity<>("Comment Deleted",HttpStatus.ACCEPTED);
@@ -87,11 +85,10 @@ public class CommentServices {
     }
     //update comments
     public ResponseEntity<?> updatecmnt(String requestTokenHeader, Comment comment){
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         Comment c=commentRepository.findById(comment.getComm_id()).get();
-        if(user.equals(c.getUsername())) {
-            comment.setUsername(user);
+        if(username.equals(c.getUsername())) {
+            comment.setUsername(username);
             comment.setAns_id(c.getAns_id());
             return new ResponseEntity<>(commentRepository.save(comment), HttpStatus.ACCEPTED);
         }
@@ -99,6 +96,10 @@ public class CommentServices {
         {
             return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
         }
+    }
+    public Boolean isAdmin(String username){
+        String role=userRepository.findById(username).get().getRole();
+        return role.equalsIgnoreCase(Role.ADMIN);
     }
 
 }
