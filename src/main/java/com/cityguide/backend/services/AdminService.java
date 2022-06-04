@@ -41,11 +41,12 @@ public class AdminService {
 
     public ResponseEntity<?> addcity(String requestTokenHeader, City city)//add city
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+//        String jwtToken = requestTokenHeader.substring(7);
+//        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String user=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         User user1 = userRepository.findById(user).get();
         System.out.println(user1.getRole() + Role.ADMIN);
-        if (user1.getRole().equals(Role.ADMIN)) {
+        if (isAdmin(user1.getUsername())) {
             return new ResponseEntity<>(cityRepository.save(city), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
