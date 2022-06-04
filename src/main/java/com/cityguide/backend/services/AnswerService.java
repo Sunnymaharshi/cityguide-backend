@@ -6,6 +6,7 @@ import com.cityguide.backend.entities.Answer;
 import com.cityguide.backend.entities.User;
 import com.cityguide.backend.jwt.JwtTokenUtil;
 import com.cityguide.backend.repositories.*;
+import com.cityguide.backend.types.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +46,8 @@ public class AnswerService {
 
     public ResponseEntity<Answer> postans(String requestTokenHeader, Answer answer)
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
-        answer.setUsername(user);
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        answer.setUsername(username);
         return  new ResponseEntity<>(answerRepository.save(answer), HttpStatus.ACCEPTED);
     }
     //Api for getting all answers for a question
@@ -76,9 +75,7 @@ public class AnswerService {
     }
     //Api for deleting Answer
     public ResponseEntity<?> delans(String requestTokenHeader, int ans_id){
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         Answer user2;
         try {
             user2 = answerRepository.findById(ans_id).get();
@@ -87,7 +84,7 @@ public class AnswerService {
         {
             return new ResponseEntity<>("Answer Not Found",HttpStatus.NOT_FOUND);
         }
-        if(user1.getUsername().equals(user2.getUsername())||user1.getRole().equalsIgnoreCase("Admin")){
+        if(username.equals(user2.getUsername())||isAdmin(username)){
             try{
                 answerRepository.deleteById(ans_id);
                 return  new  ResponseEntity<>("Answer Deleted",HttpStatus.ACCEPTED);
@@ -104,11 +101,9 @@ public class AnswerService {
     //Api for updating Answer
     public ResponseEntity<?> updateans(String requestTokenHeader,Answer answer)
     {
-        String jwtToken = requestTokenHeader.substring(7);
-        String user = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        User user1=userRepository.findById(user).get();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
         Answer user2= answerRepository.findById(answer.getAns_id()).get();
-        if(user1.getUsername().equals(user2.getUsername()))
+        if(username.equals(user2.getUsername()))
         {
             Answer answer1= new Answer();
             answer1.setUsername(user2.getUsername());
@@ -135,9 +130,8 @@ public class AnswerService {
     }
     public ResponseEntity<?> getuserans(String requestTokenHeader)
     {
-        String jwtToken=requestTokenHeader.substring(7);
-        String user=jwtTokenUtil.getUsernameFromToken(jwtToken);
-        List<Answer> answerList=userRepository.findById(user).get().getAnswerList();
+        String username=jwtTokenUtil.getUserFromToken(requestTokenHeader);
+        List<Answer> answerList=userRepository.findById(username).get().getAnswerList();
         List<mockforusernswers> display=new ArrayList<>();
 
 
@@ -148,5 +142,9 @@ public class AnswerService {
         }
 
         return new ResponseEntity<>(display,HttpStatus.OK);
+    }
+    public Boolean isAdmin(String username){
+        String role=userRepository.findById(username).get().getRole();
+        return role.equalsIgnoreCase(Role.ADMIN);
     }
 }
