@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -65,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().configurationSource(corsConfigurationSource());
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/login","/signup","/getallcities","/getAllQues/{city}","/getcity/{city}","/getanswers/{quesid}","/getcmnts/{ansid}","/getrest/{city}","/getattr/{city}","/getcitynames","/getQues/{id}","/getrest","/getattr","/getanswer/{ansid}","/city/{city}","/getsimques/{city}/{query}","/imageUpload/{city}","/geturl/{city}/{object-name}","/getimagedetails/{type}/{type_id}","/getmetro/{city}","/getbus/{city}","/getattrbyid/{id}","/getrestbyid/{id}","/report/{type}/{typeid}","/addimagedetails").permitAll().
+                .authorizeRequests().antMatchers("/login", "/signup", "/getallcities", "/getAllQues/{city}", "/getcity/{city}", "/getanswers/{quesid}", "/getcmnts/{ansid}", "/getrest/{city}", "/getattr/{city}", "/getcitynames", "/getQues/{id}", "/getrest", "/getattr", "/getanswer/{ansid}", "/city/{city}", "/getsimques/{city}/{query}", "/imageUpload/{city}", "/geturl/{city}/{object-name}", "/getimagedetails/{type}/{type_id}", "/getmetro/{city}", "/getbus/{city}", "/getattrbyid/{id}", "/getrestbyid/{id}", "/report/{type}/{typeid}", "/addimagedetails", "/updatemetrourl/{metro_id}", "/updateurl/{img_id}").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
@@ -81,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -3,7 +3,7 @@ package com.cityguide.backend.controllers;
 import com.cityguide.backend.entities.Images;
 import com.cityguide.backend.exceptions.NotFoundException;
 import com.cityguide.backend.repositories.ImageRepository;
-import org.checkerframework.checker.units.qual.A;
+import com.google.cloud.storage.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import com.google.cloud.ReadChannel;
-import com.google.cloud.storage.*;
-import com.google.protobuf.Message;
-
-import static com.google.cloud.storage.Acl.User.ofAllUsers;
 
 @RestController
 public class ImageController {
@@ -107,4 +101,15 @@ public class ImageController {
         }
         return new ResponseEntity<>(imagesList, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/updateurl/{img_id}", method = RequestMethod.POST)
+    public ResponseEntity<?> updateImageUrl(@PathVariable("img_id") Integer img_id, @RequestBody String url) {
+
+        Images images = imageRepository.findById(img_id).get();
+        images.setImg_url(url);
+        imageRepository.save(images);
+
+        return new ResponseEntity<>("URL UPDATED", HttpStatus.OK);
+    }
+
 }

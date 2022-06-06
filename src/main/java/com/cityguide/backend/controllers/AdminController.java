@@ -1,15 +1,8 @@
 package com.cityguide.backend.controllers;
 
 import com.cityguide.backend.entities.*;
-import com.cityguide.backend.jwt.JwtTokenUtil;
-import com.cityguide.backend.repositories.BusMapRepository;
-import com.cityguide.backend.repositories.BusRepository;
-import com.cityguide.backend.repositories.MetroMapRepository;
-import com.cityguide.backend.repositories.UserRepository;
 import com.cityguide.backend.services.AdminService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +80,12 @@ public class AdminController {
     public ResponseEntity<?> addmetro(@RequestHeader("Authorization") String requestToken, @RequestBody MetroMap metroMap) {
 
         return adminService.addMetro(requestToken, metroMap);
+    }
+
+    @RequestMapping(value = "/updatemetrourl/{metro_id}", method = RequestMethod.POST)
+    public ResponseEntity<?> updateMetroUrl(@PathVariable("metro_id") Integer metro_id, @RequestBody String url) {
+
+        return adminService.updateUrl(metro_id, url);
     }
 
     //<----------------------------------------------------------Bus Data-------------------------------------------------------------------->
